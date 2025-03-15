@@ -73,13 +73,13 @@ jobs:
           Start-Sleep -Seconds 5
 
       - name: Copy Build file
-        run: Copy-Item -Path C:\GitAction\FitNext\_work\Coditech\Coditech\Coditech.Project\Admin\Coditech.Admin\bin\Release\net8.0\*  -Destination C:\HostingSites\FitNext\Admin\ -Recurse -Force
+        run: Copy-Item -Path C:\GitAction\FitNext\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Admin\Coditech.Admin\bin\Release\net8.0\*  -Destination C:\HostingSites\FitNext\Admin\ -Recurse -Force
       - name: Copy Build webroot
-        run: Copy-Item -Path C:\GitAction\FitNext\_work\Coditech\Coditech\Coditech.Project\Admin\Coditech.Admin\wwwroot\*  -Destination C:\HostingSites\FitNext\Admin\wwwroot\ -Recurse -Force
+        run: Copy-Item -Path C:\GitAction\FitNext\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Admin\Coditech.Admin\wwwroot\*  -Destination C:\HostingSites\FitNext\Admin\wwwroot\ -Recurse -Force
       - name: Copy Build views
-        run: Copy-Item -Path C:\GitAction\FitNext\_work\Coditech\Coditech\Coditech.Project\Admin\Coditech.Admin\Views\*  -Destination C:\HostingSites\FitNext\Admin\Views\ -Recurse -Force
+        run: Copy-Item -Path C:\GitAction\FitNext\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Admin\Coditech.Admin\Views\*  -Destination C:\HostingSites\FitNext\Admin\Views\ -Recurse -Force
       - name: Copy Build report folder
-        run: Copy-Item -Path C:\GitAction\FitNext\_work\Coditech\Coditech\Coditech.Project\Admin\Coditech.Admin\Reports\*  -Destination C:\HostingSites\FitNext\Admin\Reports\ -Recurse -Force
+        run: Copy-Item -Path C:\GitAction\FitNext\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Admin\Coditech.Admin\Reports\*  -Destination C:\HostingSites\FitNext\Admin\Reports\ -Recurse -Force
 
       - name: Start ADMIN IIS Site and App Pool
         run: |
@@ -107,7 +107,7 @@ jobs:
           Start-Sleep -Seconds 5
 
       - name: Copy Build file
-        run: Copy-Item -Path C:\GitAction\FitNext\_work\Coditech\Coditech\Coditech.Project\API\Coditech.Engine.GymManagementSystem\bin\Release\net8.0\*  -Destination C:\HostingSites\FitNext\GMS\ -Recurse -Force 
+        run: Copy-Item -Path C:\GitAction\FitNext\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\API\Coditech.Engine.GymManagementSystem\bin\Release\net8.0\*  -Destination C:\HostingSites\FitNext\GMS\ -Recurse -Force 
 
       - name: Start GymManagementSystem IIS Site and App Pool
         run: |
@@ -135,7 +135,7 @@ jobs:
            Start-Sleep -Seconds 5
 
       - name: Copy Build file
-        run: Copy-Item -Path C:\GitAction\FitNext\_work\Coditech\Coditech\Coditech.Project\API\Coditech.Engine.MediaManager\bin\Release\net8.0\* -Destination C:\HostingSites\FitNext\MediaManager\ -Recurse -Force 
+        run: Copy-Item -Path C:\GitAction\FitNext\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\API\Coditech.Engine.MediaManager\bin\Release\net8.0\* -Destination C:\HostingSites\FitNext\MediaManager\ -Recurse -Force 
 
       - name: Start MediaManager IIS Site and App Pool
         run: |
@@ -161,7 +161,7 @@ jobs:
            Start-Sleep -Seconds 5
 
       - name: Copy Build file
-        run: Copy-Item -Path C:\GitAction\FitNext\_work\Coditech\Coditech\Coditech.Project\API\Coditech.Engine.Organisation\bin\Release\net8.0\* -Destination C:\HostingSites\FitNext\Organisation\ -Recurse -Force 
+        run: Copy-Item -Path C:\GitAction\FitNext\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\API\Coditech.Engine.Organisation\bin\Release\net8.0\* -Destination C:\HostingSites\FitNext\Organisation\ -Recurse -Force 
 
       - name: Start Organisation IIS Site and App Pool
         run: |
@@ -187,7 +187,7 @@ jobs:
   #          Start-Sleep -Seconds 5
 
   #     - name: Copy Build file
-  #       run: Copy-Item -Path C:\GitAction\FitNext\_work\Coditech\Coditech\Coditech.Project\API\Coditech.Engine.Payment\bin\Release\net8.0\* -Destination C:\HostingSites\FitNext\payment\ -Recurse -Force 
+  #       run: Copy-Item -Path C:\GitAction\FitNext\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\API\Coditech.Engine.Payment\bin\Release\net8.0\* -Destination C:\HostingSites\FitNext\payment\ -Recurse -Force 
 
   #     - name: Start payment IIS Site and App Pool
   #       run: |
