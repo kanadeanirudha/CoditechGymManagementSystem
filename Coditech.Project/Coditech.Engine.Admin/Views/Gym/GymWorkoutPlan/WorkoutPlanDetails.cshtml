@@ -1,0 +1,197 @@
+﻿@model GymWorkoutPlanViewModel
+@{
+    ViewBag.Title = "Gym Workout Plan Details";
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string actionName = ViewContext.RouteData.Values["action"].ToString();
+    Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+    keyValuePairs.Add("GymWorkoutPlanId", Model.GymWorkoutPlanId.ToString());
+    ModelPopUpViewModel addGymWorkoutPlanDetailsModel = new ModelPopUpViewModel() { ModelPopUpId = "AddGymWorkoutPlanDetailsModelPopupId", ModalContentId = "AddGymWorkoutPlanDetailsContentId" };
+}
+<!-- Page Content-->
+<div class="page-content mt-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2">
+                @Html.Partial("~/Views/Gym/GymWorkoutPlan/_GymWorkoutPlanSidePannel.cshtml", keyValuePairs)
+            </div>
+            <div class="col-lg-10">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h4 class="card-title">Workout Plan Details- @Model.WorkoutPlanName</h4>
+                            </div><!--end col-->
+                        </div>  <!--end row-->
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <h5>Target : @Model.Target kg</h5>
+                            <h5>Plan Duration : @Model.NumberOfWeeks weeks</h5>
+                            @for (int week = 1; week <= Model.NumberOfWeeks; week++)
+                            {
+                                <div class="col-lg-12 mb-3">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between">
+                                            <h4 class="card-title">Week @week</h4>
+                                            <div class="d-flex justify-content-end">
+                                             @*    <a data-bs-toggle="modal" data-bs-target="#@addGymWorkoutPlanDetailsModel.ModelPopUpId" href="void javascritp(0)" onclick="GymWorkoutPlan.AddWorkoutPlanDetails('@addGymWorkoutPlanDetailsModel.ModalContentId','@Model.GymWorkoutPlanId','@week')" title="Add " class="btn btn-sm btn-soft-success btn-circle float-end"><i class="fas ti-plus"></i></a> *@
+
+                                                <!-- Delete Button for week -->
+                                                <a href="#" title="Delete" class="btn btn-sm btn-soft-danger btn-circle" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_Week_@week">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                                <!-- Delete Confirmation Modal -->
+                                                <div class="modal fade" id="confirmDeleteModal_Week_@week" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel_Week_@week" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="confirmDeleteModalLabel_Week_@week">Confirm Delete for Week @week</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body" style="text-align: left;">
+                                                                <span style="font-size: 24px; margin-right: 10px;"><i class="fas fa-exclamation-triangle text-danger"></i></span>
+                                                                <span style="font-size: 16px;">Are you sure you want to delete this week @week?</span>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                <!-- Delete action with selectedCentreCode parameter -->
+                                                                <a href="../@controllerName/DeleteWorkoutPlanDetailsWeek?gymWorkoutPlanId=@Model.GymWorkoutPlanId&workoutWeekNumber=@week" class="btn btn-outline-danger" onclick="GymWorkoutPlan.DeleteWorkoutPlanDetailsWeek('@Model.GymWorkoutPlanId','@week')">Delete</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                @*  <a href="../@controllerName/DeleteWorkoutPlanDetailsWeek?gymWorkoutPlanId=@Model.GymWorkoutPlanId&workoutWeekNumber=@week" title="Delete" class="btn btn-sm btn-soft-danger btn-circle"><i class="fas fa-trash-alt"></i></a> *@
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                @for (int day = 1; day <= Model.NumberOfDaysPerWeek; day++)
+                                                {
+                                                    <div class="col-lg-6 mb-3">
+                                                        <div class="card">
+                                                            <div class="card-header">
+                                                                <h4 class="card-title">Day @day</h4>
+                                                                <div class="d-flex justify-content-end">
+                                                                    <a data-bs-toggle="modal" data-bs-target="#@addGymWorkoutPlanDetailsModel.ModelPopUpId" href="javascritp:void(0)" onclick="GymWorkoutPlan.AddWorkoutPlanDetails('@addGymWorkoutPlanDetailsModel.ModalContentId','@Model.GymWorkoutPlanId','@week','@day')" title="Add " class="btn btn-sm btn-soft-success btn-circle float-end"><i class="fas ti-plus"></i></a>
+                                                                   @*  <!-- Delete Button for Day-->
+                                                                    <a href="#" title="Delete" class="btn btn-sm btn-soft-danger btn-circle" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_Day_@day">
+                                                                        <i class="fas fa-trash-alt"></i>
+                                                                    </a>
+                                                                    <!-- Delete Confirmation Modal -->
+                                                                    <div class="modal fade" id="confirmDeleteModal_Day_@day" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel_Day_@day" aria-hidden="true">
+                                                                        <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;" role="document">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header">
+                                                                                    <h5 class="modal-title" id="confirmDeleteModalLabel_Day_@day">Confirm Delete for Day @day</h5>
+                                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                </div>
+                                                                                <div class="modal-body" style="text-align: left;">
+                                                                                    <span style="font-size: 24px; margin-right: 10px;"><i class="fas fa-exclamation-triangle text-danger"></i></span>
+                                                                                    <span style="font-size: 16px;">Are you sure you want to delete this day @day?</span>
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                                    <!-- Delete action with selectedCentreCode parameter -->
+                                                                                    <a href="../@controllerName/DeleteWorkoutPlanDetailsDay?gymWorkoutPlanId=@Model.GymWorkoutPlanId&workoutWeekNumber=@week&workoutDayNumber=@day" class="btn btn-outline-danger" onclick="GymWorkoutPlan.DeleteWorkoutPlanDetailsDay('@Model.GymWorkoutPlanId','@week','@day')">Delete</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> *@
+                                                                    <a href="../@controllerName/DeleteWorkoutPlanDetailsDay?gymWorkoutPlanId=@Model.GymWorkoutPlanId&workoutWeekNumber=@week&workoutDayNumber=@day" title="Delete" class="btn btn-sm btn-soft-danger btn-circle"><i class="fas fa-trash-alt"></i></a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                @if (Model.GymWorkoutPlanDetailList.Any(x => x.WorkoutDay == day && x.WorkoutWeek == week))
+                                                                {
+                                                                    <table class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline" style="border-collapse: collapse; border-spacing: 0px; width: 100%;">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>
+                                                                                    Workout Name
+                                                                                </th>
+                                                                                <th>Set</th>
+                                                                                <th>Weight-Repetition-Duration</th>
+                                                                                <th>Action</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        @foreach (var item in @Model.GymWorkoutPlanDetailList.Where(x => x.WorkoutDay == day && x.WorkoutWeek == week))
+                                                                        {
+                                                                            int count = 1;
+                                                                            foreach (var item1 in item.GymWorkoutPlanSetList)
+                                                                            {
+                                                                                if (count == 1)
+                                                                                {
+                                                                                    <tr>
+                                                                                        <th rowspan="@item.GymWorkoutPlanSetList.Count">@item.WorkoutName</th>
+                                                                                        <th rowspan="@item.GymWorkoutPlanSetList.Count">@item.GymWorkoutPlanSetList.Count</th>
+                                                                                        <td>@item1.Weight Kg @item1.Repetitions Rep @item1.Duration Sec</td>
+                                                                                        <th rowspan="@item.GymWorkoutPlanSetList.Count">
+                                                                                            <!-- Delete Button for Set-->
+                                                                                            <a href="#" title="Delete" class="btn btn-sm btn-soft-danger btn-circle" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_@item.GymWorkoutPlanDetailId">
+                                                                                                <i class="fas fa-trash-alt"></i>
+                                                                                            </a>
+                                                                                            <!-- Delete Confirmation Modal -->
+                                                                                            <div class="modal fade" id="confirmDeleteModal_@item.GymWorkoutPlanDetailId" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                                                                                                <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;" role="document">
+                                                                                                    <div class="modal-content">
+                                                                                                        <div class="modal-header">
+                                                                                                            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete for Set</h5>
+                                                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                                        </div>
+                                                                                                        <div class="modal-body" style="text-align: left;">
+                                                                                                            <span style="font-size: 24px; margin-right: 10px;"><i class="fas fa-exclamation-triangle text-danger"></i></span>
+                                                                                                            <span style="font-size: 16px;">Are you sure you want to delete this record?</span>
+                                                                                                        </div>
+                                                                                                        <div class="modal-footer">
+                                                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                                                            <!-- Delete action with selectedCentreCode parameter -->
+                                                                                                            <a href="../@controllerName/DeleteWorkoutPlanDetailsSet?gymWorkoutPlanId=@Model.GymWorkoutPlanId&gymWorkoutPlanDetailId=@item.GymWorkoutPlanDetailId" title="Delete" class="btn btn-outline-danger" onclick="GymWorkoutPlan.DeleteWorkoutPlanDetailsSet('@item.GymWorkoutPlanDetailId')">Delete</a>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            @*  <a href="../@controllerName/DeleteWorkoutPlanDetailsSet?gymWorkoutPlanId=@Model.GymWorkoutPlanId&gymWorkoutPlanDetailId=@item.GymWorkoutPlanDetailId" title="Delete" class="btn btn-sm btn-soft-danger btn-circle"><i class="fas fa-trash-alt"></i></a> *@
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td>@item1.Weight Kg @item1.Repetitions rep @item1.Duration sec</td>
+                                                                                    </tr>
+                                                                                }
+                                                                                count++;
+                                                                            }
+                                                                        }
+                                                                    </table>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>No Workouts added</span>
+                                                                }
+                                                                <div class="text-center mt-3">
+                                                                    <button data-bs-toggle="modal" data-bs-target="#@addGymWorkoutPlanDetailsModel.ModelPopUpId" href="javascritp:void(0)" onclick="GymWorkoutPlan.AddWorkoutPlanDetails('@addGymWorkoutPlanDetailsModel.ModalContentId','@Model.GymWorkoutPlanId','@week','@day')" type="button" class="btn btn-success">Add Workout</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("~/Views/Shared/_ModelPopUp.cshtml", addGymWorkoutPlanDetailsModel)
+@section scripts {
+    <!-- end page content -->
+    <script src="~/js/coditech/gym/GymWorkoutPlan.js"></script>
+}

@@ -1,0 +1,33 @@
+﻿@model GymMemberMembershipPlanListViewModel
+@{
+    ViewBag.Title = "Membership Plan List";
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string css = Model.PersonId > 0 ? "col-lg-10" : "col-lg-12";
+    Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+    keyValuePairs.Add("GymMemberDetailId", Model.GymMemberDetailId.ToString());
+    keyValuePairs.Add("PersonId", Model.PersonId.ToString());
+  }
+<!-- Page Content-->
+<div class="page-content mt-5">
+    <div class="container-fluid">
+        <div class="row">
+                <div class="col-lg-2">
+                    @Html.Partial("~/Views/Gym/GymMemberDetails/_GymMemberDetailsSidePannel.cshtml", keyValuePairs)
+                </div>
+            <div class="col-lg-10">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Membership Plan List- @Model.FirstName @Model.LastName</span>
+                        <a class=" btn btn-sm btn-soft-primary float-end" href="/@controllerName/AssociateGymMemberMembershipPlan?gymMemberDetailId=@Model.GymMemberDetailId&personId=@Model.PersonId" role="button"><i class="fas fa-plus me-2"></i>Add/Upgrade Membership Plan</a>
+                    </div>
+                    <div class="card-body">
+                        <div id="DataTablesDivId" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                            @Html.Partial("~/Views/Gym/GymMemberDetails/GymMemberMembershipPlan/_GymMemberMembershipPlanList.cshtml", Model)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,108 @@
+﻿@model GeneralPersonAttendanceDetailsViewModel
+@{
+    Layout = null;
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
+<!-- Page Content-->
+<div class="modal-header">
+    <h6 class="modal-title m-0" id="exampleModalDefaultLabel">
+        <span><i class="fas fa-calendar-check"></i></span>
+        <span style="margin-left: 5px;">Manual Attendance : @Model.FirstName @Model.LastName </span>
+    </h6>
+
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="margin-top: -3px; padding: 10px;"></button>
+</div>
+
+@using (Html.BeginForm("CreatEditGeneralPersonAttendanceDetails", controllerName, FormMethod.Post, new { id = "frmGymMemberManualAttendance" }))
+{
+    @Html.AntiForgeryToken()
+    ;
+    @Html.HiddenFor(x => x.EntityId)
+    @Html.HiddenFor(x => x.GeneralPersonAttendanceDetailId)
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="mb-3">
+                    @Html.LabelFor(x => x.AttendanceDate, new { @class = "form-label required" })
+                    @Html.TextBoxFor(x => x.AttendanceDate, AdminGeneralHelper.DateFormatForTextBox(), new { @class = "form-control", @readonly = "true" })
+                    @Html.ValidationMessageFor(x => x.AttendanceDate, null, new { id = "errorAttendanceDate" })
+                </div>
+            </div>
+            <div class="mb-3">
+                @Html.LabelFor(x => x.GeneralAttendanceStateEnumId, new { @class = "form-label required" })
+                @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", new DropdownViewModel()
+       {
+           DropdownSelectedValue = Convert.ToString(Model.GeneralAttendanceStateEnumId),
+           DropdownName = "GeneralAttendanceStateEnumId",
+           GroupCode = DropdownTypeEnum.AttendanceState.ToString(),
+           IsTextValueSame = true,
+           IsStringProperty = true,
+           ChangeEvent = "GymMemberDetails.DisplayCheckInCheckOutDiv()"
+       })
+
+                @Html.ValidationMessageFor(x => x.GeneralAttendanceStateEnumId, null, new { id = "errorGeneralAttendanceStateEnumId" })
+            </div>
+
+            <div class="mb-3" id="LoginTimeDivId" style="display: none;">
+                @Html.LabelFor(x => x.LoginTime, new { @class = "form-label" })
+                @Html.TextBoxFor(x => x.LoginTime, new { @class = "form-control form-time", type = "time", onchange = "SaveManualAttendance()" })
+                @Html.ValidationMessageFor(x => x.LoginTime, null, new { id = "errorLoginTime" })
+            </div>
+
+            <div class="mb-3" id="LogoutTimeDivId" style="display: none;">
+                @Html.LabelFor(x => x.LogoutTime, new { @class = "form-label" })
+                @Html.TextBoxFor(x => x.LogoutTime, new { @class = "form-control form-time", type = "time", onchange = "SaveManualAttendance()" })
+                @Html.ValidationMessageFor(x => x.LogoutTime, null, new { id = "errorLogoutTime" })
+            </div>
+
+            <div class="mb-3">
+                @Html.LabelFor(x => x.Remark, new { @class = "form-label" })
+                @Html.TextAreaFor(x => x.Remark, new { @class = "form-control", @maxlength = "150" })
+                <div id="charCount" class="mb-3 text-end">0/150</div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <a id="saveDraft" class="btn btn-success" data-test-selector="linkSave" onclick="GymMemberDetails.SaveManualAttendance()">@AdminResources.LabelSave</a>
+        <button type="button" class="btn btn-secondary ft-x" data-bs-dismiss="modal">Cancel</button>
+    </div>
+}
+
+<!-- Your custom scripts -->
+@Html.Partial("_ValidationScriptsPartial")
+<script src="~/js/coditech/gym/gymmemberdetails.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Remark').on('input', function () {
+            // Get the current character count
+            var count = this.value.length;
+
+            // Update the character count display
+            $('#charCount').text(count + '/150');
+        });
+        $(function () {
+            $("#AttendanceDate").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-100:+100",
+                dateFormat: "@AdminGeneralHelper.DateFormatForCalendar()",
+                language: "en",
+                autoSize: true,
+                gotoCurrent: true,
+                clearBtn: true,
+                showButtonPanel: true,
+                closeText: 'Clear',
+                onClose: function (dateText, inst) {
+                    if ($(window.event.srcElement).hasClass('ui-datepicker-close')) {
+                        document.getElementById(this.id).value = '';
+                    }
+                },
+                minDate: "-1M",
+                maxDate: new Date()
+            });
+        });
+    });
+</script>

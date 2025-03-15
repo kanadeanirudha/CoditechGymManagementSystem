@@ -1,0 +1,42 @@
+﻿@model GymMemberFollowUpListViewModel
+@{
+    ViewBag.Title = "Member Follow-Up List";
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string css = Model.PersonId > 0 ? "col-lg-10" : "col-lg-12";
+    Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+    keyValuePairs.Add("GymMemberDetailId", Model.GymMemberDetailId.ToString());
+    keyValuePairs.Add("PersonId", Model.PersonId.ToString());
+    ModelPopUpViewModel addFollowUpModel = new ModelPopUpViewModel() { ModelPopUpId = "AddUpdateFollowUpModelPopupId", ModalContentId = "AddUpdateFollowUpModelPopupContentId" };
+}
+<!-- Page Content-->
+<div class="page-content mt-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2">
+                @Html.Partial("~/Views/Gym/GymMemberDetails/_GymMemberDetailsSidePannel.cshtml", keyValuePairs)
+            </div>
+            <div class="col-lg-10">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Member Follow-Up List- @Model.FirstName @Model.LastName</span>
+                        <a class="btn btn-sm btn-soft-primary float-end" data-bs-toggle="modal" data-bs-target="#@addFollowUpModel.ModelPopUpId" href="void javascritp(0)" onclick="GymMemberDetails.GetMemberFollowUp('@addFollowUpModel.ModalContentId','@Model.GymMemberDetailId','0','@Model.PersonId')" title="Add Follow-Up">
+                            <i class="fas fa-plus me-2"></i>Add Follow-Up
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div id="DataTablesDivId" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                            @Html.Partial("~/Views/Gym/GymMemberDetails/_GymMemberFollowUpList.cshtml", Model)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- end page content -->
+@Html.Partial("~/Views/Shared/_ModelPopUp.cshtml", addFollowUpModel)
+@section scripts {
+    <!-- end page content -->
+    <script src="~/js/coditech/gym/gymmemberdetails.js"></script>
+}

@@ -1,0 +1,133 @@
+﻿@model GymMemberMembershipPlanViewModel
+@{
+    ViewBag.Title = "Associate Membership Plan";
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+    keyValuePairs.Add("GymMemberDetailId", Model.GymMemberDetailId.ToString());
+    keyValuePairs.Add("PersonId", Model.PersonId.ToString());
+}
+<!-- Page Content-->
+<div class="page-content mt-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2">
+                @Html.Partial("~/Views/Gym/GymMemberDetails/_GymMemberDetailsSidePannel.cshtml", keyValuePairs)
+            </div>
+            <div class="col-lg-10">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Associate Membership Plan- @Model.FirstName @Model.LastName</span>
+                        
+                    </div>
+                    <div class="card-body">
+                        @using (Html.BeginForm("AssociateGymMemberMembershipPlan", controllerName, FormMethod.Post, new { id = "frmAssociateGymMemberMembershipPlan" }))
+                        {
+                            <input type="hidden" id="hdnMaximunDiscount" value="0" />
+                            @Html.HiddenFor(x => x.GymMembershipPlanId)
+                            @Html.HiddenFor(x => x.GymMemberDetailId)
+                            @Html.HiddenFor(x => x.PersonId)
+                            @Html.HiddenFor(x => x.CentreCode)
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.GymMembershipPlanId, new { @class = "form-label required" })
+                                        @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", new DropdownViewModel()
+                               {
+                                   DropdownName = "SelectedGymMembershipPlanId",
+                                   DropdownType = DropdownCustomTypeEnum.GymMembershipPlan.ToString(),
+                                   IsRequired = false,
+                                   Parameter = Model.CentreCode,
+                                   ChangeEvent = "GymMemberMembershipPlan.ChangeMembershipPlan()",
+                                   DropdownSelectedValue = Model.GymMembershipPlanId.ToString()
+                               })
+                                        @Html.ValidationMessageFor(x => x.GymMembershipPlanId, null, new { id = "errorGymMembershipPlanId" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.PlanStartDate, new { @class = "form-label required" })
+                                        @Html.TextBoxFor(x => x.PlanStartDate, AdminGeneralHelper.DateFormatForTextBox(), new { @class = "form-control", @readonly = "true" })
+                                        @Html.ValidationMessageFor(x => x.PlanStartDate)
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.PlanAmount, new { @class = "form-label" })
+                                        @Html.TextBoxFor(x => x.PlanAmount, new { @class = "form-control", @readonly = "true" })
+                                        @Html.ValidationMessageFor(x => x.PlanAmount)
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.DiscountAmount, new { @class = "form-label" })
+                                        @Html.TextBoxFor(x => x.DiscountAmount, new { @class = "form-control", onkeypress = "return CoditechCommon.ValidNumeric()" })
+                                        @Html.ValidationMessageFor(x => x.DiscountAmount, null, new { id = "errorDiscountAmount" })
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.PaymentTypeEnumId, new { @class = "form-label required" })
+                                        @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", new DropdownViewModel()
+                               {
+                                   DropdownSelectedValue = Model.PaymentTypeEnumId.ToString(),
+                                   DropdownName = "PaymentTypeEnumId",
+                                   GroupCode = DropdownTypeEnum.PaymentType.ToString(),
+                                   Parameter = Convert.ToString(Model.PaymentTypeEnumId)
+                               })
+                                        @Html.ValidationMessageFor(x => x.PaymentTypeEnumId, null, new { id = "errorPaymentTypeEnumId" })
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.TransactionReference, new { @class = "form-label" })
+                                        @Html.TextAreaFor(x => x.TransactionReference, new { @class = "form-control", @maxlength = "200" })
+                                        @Html.ValidationMessageFor(x => x.TransactionReference, null, new { id = "errorTransactionReference" })
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.Remark, new { @class = "form-label" })
+                                        @Html.TextAreaFor(x => x.Remark, new { @class = "form-control", @maxlength = "200" })
+                                        @Html.ValidationMessageFor(x => x.Remark)
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" id="saveDraft" class="btn btn-success" data-test-selector="linkSave" onclick="GymMemberMembershipPlan.AssociateGymMemberMembershipPlan()">@AdminResources.LabelSave</button>
+                            <a href="../@controllerName/List" class="btn btn-secondary"><i class="ft-x"></i>@AdminResources.LabelCancel</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/coditech/gym/gymmembermembershipplan.js"></script>
+<!-- end page content -->
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            $("#PlanStartDate").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: "@AdminGeneralHelper.DateFormatForCalendar()",
+                language: "en",
+                autoSize: true,
+                gotoCurrent: true,
+                clearBtn: true,
+                showButtonPanel: true,
+                closeText: 'Clear',
+                onClose: function (dateText, inst) {
+                    if ($(window.event.srcElement).hasClass('ui-datepicker-close')) {
+                        document.getElementById(this.id).value = '';
+                    }
+                },
+                minDate: "-1M",
+                maxDate: "+3M",
+            });
+        });
+    </script>
+
+}
+

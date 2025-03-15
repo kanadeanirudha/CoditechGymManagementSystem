@@ -1,0 +1,246 @@
+﻿@using Coditech.Admin.Utilities;
+@model GymMembershipPlanViewModel
+@{
+    ViewBag.Title = Model.GymMembershipPlanId > 0 ? "Update Gym Membership Plan" : "Create Gym Membership Plan";
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string actionName = ViewContext.RouteData.Values["action"].ToString();
+    DropdownViewModel centreDropdown = new DropdownViewModel()
+            {
+                DropdownType = DropdownTypeEnum.AccessibleCentre.ToString(),
+                DropdownName = "CentreCode",
+                DropdownSelectedValue = Model.CentreCode,
+                ChangeEvent = "",
+                IsDisabled = Model.GymMembershipPlanId > 0
+            };
+}
+<!-- Page Content-->
+<div class="page-content mt-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                @if (Model.GymMembershipPlanId > 0)
+                                {
+                                    <h4 class="card-title"><span>Update Gym Membership Plan</span></h4>
+                                }
+                                else
+                                {
+                                    <h4 class="card-title">Create Gym Membership Plan</h4>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post))
+                        {
+                            @Html.HiddenFor(m => m.GymMembershipPlanId)
+                            <div class="row">
+                                @if (Model.GymMembershipPlanId == 0)
+                                {
+
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            @Html.LabelFor(x => x.CentreCode, new { @class = "form-label required" })
+                                            @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", centreDropdown)
+                                            @Html.ValidationMessageFor(x => x.CentreCode)
+                                        </div>
+                                    </div>
+
+                                }
+                                else
+                                {
+                                    @Html.HiddenFor(m => m.CentreCode)
+                                }
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.PlanTypeEnumId, new { @class = "form-label required" })
+                                        @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", new DropdownViewModel()
+                               {
+                                   DropdownSelectedValue = Model.PlanTypeEnumId.ToString(),
+                                   DropdownName = "PlanTypeEnumId",
+                                   GroupCode = DropdownCustomTypeEnum.GymPlanType.ToString(),
+                                   AddSelectItem = true,
+                                   IsDisabled = Model.GymMembershipPlanId > 0
+                               })
+                                        @Html.ValidationMessageFor(x => x.PlanTypeEnumId, null, new { id = "errorPlanTypeEnumId" })
+                                        @if (Model.GymMembershipPlanId > 0)
+                                        {
+                                            @Html.HiddenFor(m => m.PlanTypeEnumId)
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3  multiselect-dropdown">
+                                        @Html.LabelFor(x => x.SelectedGeneralServicesIds, new { @class = "form-label required" })
+                                        @Html.ListBoxFor(m => m.SelectedGeneralServicesIds, new SelectList(Model.AllGeneralServices, "InventoryGeneralItemLineId", "ItemName"), new { @class = "selectpicker form-control " })
+                                        @Html.ValidationMessageFor(x => x.SelectedGeneralServicesIds)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.MembershipPlanName, new { @class = "form-label required" })
+                                        @Html.TextBoxFor(x => x.MembershipPlanName, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.MembershipPlanName)
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.MaxCost, new { @class = "form-label required" })
+                                        @if (Model.IsEditable || Model.GymMembershipPlanId == 0)
+                                        {
+                                            @Html.TextBoxFor(x => x.MaxCost, new { @class = "form-control", @onkeypress = "return CoditechCommon.ValidNumeric()", @onchange = "GymMembershipPlan.ChangeMaxCost()" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(x => x.MaxCost, new { @class = "form-control", @readonly = "true" })
+                                        }
+                                        @Html.ValidationMessageFor(x => x.MaxCost)
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.MinCost, new { @class = "form-label required" })
+                                        @if (Model.IsEditable || Model.GymMembershipPlanId == 0)
+                                        {
+                                            @Html.TextBoxFor(x => x.MinCost, new { @class = "form-control", @onkeypress = "return CoditechCommon.ValidNumeric()" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(x => x.MinCost, new { @class = "form-control", @readonly = "true" })
+                                        }
+                                        @Html.ValidationMessageFor(x => x.MinCost)
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.PlanDurationTypeEnumId, new { @class = "form-label required" })
+                                        @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", new DropdownViewModel()
+                               {
+                                   DropdownSelectedValue = Model.PlanDurationTypeEnumId.ToString(),
+                                   DropdownName = "PlanDurationTypeEnumId",
+                                   GroupCode = DropdownCustomTypeEnum.GymPlanDurationType.ToString(),
+                                   AddSelectItem = false,
+                                   ChangeEvent = "GymMembershipPlan.ChangePlanType()",
+                                   IsDisabled = Model.GymMembershipPlanId > 0
+                               })
+                                        @Html.ValidationMessageFor(x => x.PlanDurationTypeEnumId, null, new { id = "errorPlanDurationTypeEnumId" })
+                                        @if (Model.GymMembershipPlanId > 0)
+                                        {
+                                            @Html.HiddenFor(m => m.PlanDurationTypeEnumId)
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4" id="PlanDurationInMonthDivId" style="display: @(Model.GymMembershipPlanId == 0 || string.Equals(Model.PlanDurationType,"duration",StringComparison.InvariantCultureIgnoreCase)? "block" : "none")">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.PlanDurationInMonth, new { @class = "form-label required"})
+                                        @if (Model.IsEditable || Model.GymMembershipPlanId == 0)
+                                        {
+                                            @Html.TextBoxFor(x => x.PlanDurationInMonth, new { @class = "form-control", @onkeypress = "return CoditechCommon.ValidNumeric()" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(x => x.PlanDurationInMonth, new { @class = "form-control", @readonly = "true" })
+                                        }
+                                        @Html.ValidationMessageFor(x => x.PlanDurationInMonth)
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4" id="PlanDurationInDaysDivId" style="display: @(Model.GymMembershipPlanId == 0 || string.Equals(Model.PlanDurationType,"duration",StringComparison.InvariantCultureIgnoreCase)? "block" : "none")">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.PlanDurationInDays, new { @class = "form-label required" })
+                                        @if (Model.IsEditable || Model.GymMembershipPlanId == 0)
+                                        {
+                                            @Html.TextBoxFor(x => x.PlanDurationInDays, new { @class = "form-control", @onkeypress = "return CoditechCommon.ValidNumeric()" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(x => x.PlanDurationInDays, new { @class = "form-control", @readonly = "true" })
+                                        }
+                                        @Html.ValidationMessageFor(x => x.PlanDurationInDays)
+                                    </div>
+                                </div>
+                                <div class="col-lg-4" id="PlanDurationInSessionDivId" style="display: @(Model.GymMembershipPlanId > 0 && string.Equals(Model.PlanDurationType,AdminConstants.PlanSessionType,StringComparison.InvariantCultureIgnoreCase)? "block" : "none")">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.PlanDurationInSession, new { @class = "form-label required" })
+                                        @if (Model.IsEditable || Model.GymMembershipPlanId == 0)
+                                        {
+                                            @Html.TextBoxFor(x => x.PlanDurationInSession, new { @class = "form-control", @onkeypress = "return CoditechCommon.ValidNumeric()" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(x => x.PlanDurationInSession, new { @class = "form-control", @readonly = "true" })
+                                        }
+                                        @Html.ValidationMessageFor(x => x.PlanDurationInSession)
+                                    </div>
+                                </div>
+
+
+
+                                @* <div class="col-lg-4">
+                            <div class="mb-3">
+                            @Html.LabelFor(x => x.IsRenewable, new { @class = "form-label" })
+                            <div class="form-check">
+                            @Html.CheckBoxFor(x => x.IsRenewable, new { @class = "form-check-input" })
+                            </div>
+                            </div>
+                            </div> *@
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.IsTimebaseBiometricAccess, new { @class = "form-label" })
+                                        <div class="form-check">
+                                            @Html.CheckBoxFor(x => x.IsTimebaseBiometricAccess, new { @class = "form-check-input" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.FromTime, new { @class = "form-label required" })
+                                        @Html.TextBoxFor(x => x.FromTime, new { @class = "form-control", type = "time" })
+                                        @Html.ValidationMessageFor(x => x.FromTime)
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.ToTime, new { @class = "form-label required" })
+                                        @Html.TextBoxFor(x => x.ToTime, new { @class = "form-control", type = "time" })
+                                        @Html.ValidationMessageFor(x => x.ToTime)
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.IsActive, new { @class = "form-label" })
+                                        <div class="form-check">
+                                            @Html.CheckBoxFor(x => x.IsActive, new { @class = "form-check-input" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.IsTaxExclusive, new { @class = "form-label" })
+                                        <div class="form-check">
+                                            @Html.CheckBoxFor(x => x.IsTaxExclusive, new { @class = "form-check-input" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success">@AdminResources.LabelSave</button>
+                            <a href="../@controllerName/Cancel?SelectedCentreCode=@Model.CentreCode" class="btn btn-secondary"><i class="ft-x"></i>@AdminResources.LabelCancel</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/coditech/gym/gymmembershipplan.js"></script>
+<script>
+    $(document).ready(function () {
+        GymMembershipPlan.Initialize();
+    });
+</script>

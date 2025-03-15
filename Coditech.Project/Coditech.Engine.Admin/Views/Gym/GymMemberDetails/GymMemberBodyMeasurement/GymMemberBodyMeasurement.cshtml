@@ -1,0 +1,107 @@
+﻿@model GymMemberBodyMeasurementListViewModel
+@{
+    ViewBag.Title = "Body Measurement Details";
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string actionName = ViewContext.RouteData.Values["action"].ToString();
+    Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+    keyValuePairs.Add("GymMemberDetailId", Model.GymMemberDetailId.ToString());
+    keyValuePairs.Add("PersonId", Model.PersonId.ToString());
+    ModelPopUpViewModel addGymMemberBodyMeasurementModel = new ModelPopUpViewModel() { ModelPopUpId = "AddGymMemberBodyMeasurementModelPopupId", ModalContentId = "AddGymMemberBodyMeasurementContentId" };
+}
+<!-- Page Content-->
+<div class="page-content mt-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2">
+                @Html.Partial("~/Views/Gym/GymMemberDetails/_GymMemberDetailsSidePannel.cshtml", keyValuePairs)
+            </div>
+            <div class="col-lg-10">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h4 class="card-title">Body Measurement Details- @Model.FirstName @Model.LastName</h4>
+                            </div><!--end col-->
+                        </div>  <!--end row-->
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Inside the foreach loop where you're iterating over GymMemberBodyMeasurementList -->
+                            @foreach (var item in Model.GymMemberBodyMeasurementList)
+                            {
+                                <div class="col-lg-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div id="DataTablesDivId_@item.GymBodyMeasurementTypeId" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                                                <table id="datatable_@item.GymMemberBodyMeasurementId" class="action-set table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline" style="border-collapse: collapse; border-spacing: 0px; width: 100%;" role="grid" aria-describedby="datatable_info">
+                                                    <thead>
+                                                        <tr role="row">
+                                                            <th colspan="3" class="px-1">
+                                                                @item.BodyMeasurementType
+                                                                <a data-bs-toggle="modal" data-bs-target="#@addGymMemberBodyMeasurementModel.ModelPopUpId" href="void javascritp(0)" onclick="GymMemberDetails.AddGymMemberBodyMeasurement('@addGymMemberBodyMeasurementModel.ModalContentId','@Model.GymMemberDetailId','@item.GymBodyMeasurementTypeId','@item.GymMemberBodyMeasurementId','@item.BodyMeasurementType','@item.MeasurementUnitShortCode','@Model.PersonId')" title="Add @item.BodyMeasurementType" class="btn btn-sm btn-soft-success btn-circle float-end"><i class="fas ti-plus"></i></a>
+                                                            </th>
+                                                        </tr>
+                                                        @if (item.GymMemberBodyMeasurementValueList?.Count > 0)
+                                                        {
+                                                            <tr role="row">
+                                                                <th>Date</th>
+                                                                <th>@item.BodyMeasurementType</th>
+                                                                <th style="width: 5px;">Action</th>
+                                                            </tr>
+                                                        }
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (item.GymMemberBodyMeasurementValueList?.Count > 0)
+                                                        {
+                                                            foreach (var value in item.GymMemberBodyMeasurementValueList)
+                                                            {
+                                                                <tr>
+                                                                    <td>@value.BodyMeasurementDate.ToCoditechDateWithTimeFormat()</td>
+                                                                    <td>
+                                                                        @if (value.MeasurementIndicator == "UP")
+                                                                        {
+                                                                            <a class="fas fa-arrow-up btn-soft-success"></a>
+                                                                        }
+                                                                        else if (value.MeasurementIndicator == "DOWN")
+                                                                        {
+                                                                            <a class="fas fa-arrow-down btn-soft-danger"></a>
+                                                                        }
+                                                                        else if (value.MeasurementIndicator == "NOCHANGE")
+                                                                        {
+                                                                            <i class="fas fa-arrow-right btn-soft-secondary"></i>
+                                                                        }
+                                                                        @value.BodyMeasurementValue @value.MeasurementUnitShortCode
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="d-flex justify-content-start">
+                                                                            <a data-bs-toggle="modal" data-bs-target="#@addGymMemberBodyMeasurementModel.ModelPopUpId" href="void javascritp(0)"
+                                                                               onclick="GymMemberDetails.AddGymMemberBodyMeasurement('@addGymMemberBodyMeasurementModel.ModalContentId','@Model.GymMemberDetailId','@item.GymBodyMeasurementTypeId','@value.GymMemberBodyMeasurementId','@item.BodyMeasurementType','@item.MeasurementUnitShortCode','@Model.PersonId')" title="Update @item.BodyMeasurementType" class="btn btn-sm btn-soft-success btn-circle float-end"><i class="fas fa-edit"></i></a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr><td>No Result Found</td></tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("~/Views/Shared/_ModelPopUp.cshtml", addGymMemberBodyMeasurementModel)
+@section scripts {
+    <!-- end page content -->
+    <script src="~/js/coditech/gym/gymmemberdetails.js"></script>
+}

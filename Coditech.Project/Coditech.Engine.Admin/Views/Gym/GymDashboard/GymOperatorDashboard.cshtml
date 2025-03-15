@@ -1,0 +1,476 @@
+﻿@using Coditech.Admin.Utilities;
+@using Coditech.Common.API.Model;
+@using Newtonsoft.Json
+@model GymDashboardViewModel
+@{
+    ViewBag.Title = "Dashboard";
+    string[] XValuesPie = ["Active Member", "InActive Member"];
+    int[] YValuesPie = [Model.ActiveMemberCount, Model.InActiveMemberCount];
+    string[] backgroundColor = ["rgba(42, 118, 244, 0.18)", "rgba(42, 118, 244, 0.30)"];
+    PieChartViewModel activeInActiveMemberPieChart = new PieChartViewModel()
+            {
+                PieChartId = "ActiveInActiveMemberPieChart",
+                XValues = JsonConvert.SerializeObject(XValuesPie),
+                YValues = JsonConvert.SerializeObject(YValuesPie),
+                BackgroundColor = JsonConvert.SerializeObject(backgroundColor),
+            };
+
+    //Financial Overview
+    int dateCount = Model.TransactionOverviewList.Count();
+    string[] XValuesBarFinancialOverview = new string[dateCount];
+    decimal[] YValuesBarFinancialOverview = new decimal[dateCount];
+    int count = 0;
+    foreach (var item in Model.TransactionOverviewList)
+    {
+        XValuesBarFinancialOverview[count] = Convert.ToString(item.TransactionDate.ToCoditechDateFormat());
+        YValuesBarFinancialOverview[count] = Convert.ToInt32(item.BillAmount);
+        count++;
+    }
+
+    BarChartViewModel transactionOverviewModel = new BarChartViewModel()
+            {
+                BarChartId = "TransactionOverviewChart",
+                XValues = JsonConvert.SerializeObject(XValuesBarFinancialOverview),
+                YValues = JsonConvert.SerializeObject(YValuesBarFinancialOverview),
+                XAxisLabel = "Transaction Date",
+                YAxisLabel = "Amount",
+                BackgroundColor = JsonConvert.SerializeObject(backgroundColor),
+            };
+
+    //Lead Generation Source
+    int leadCount = Model.GymGeneralLeadGenerationSourceList.Count();
+    string[] XValuesBarLeadGenerationSource = new string[leadCount];
+    int[] YValuesBarLeadGenerationSource = new int[leadCount];
+    int count2 = 0;
+    foreach (var item in Model.GymGeneralLeadGenerationSourceList)
+    {
+        XValuesBarLeadGenerationSource[count2] = Convert.ToString(item.LeadGenerationSource);
+        YValuesBarLeadGenerationSource[count2] = Convert.ToInt32(item.LeadGenerationSourceCount);
+        count2++;
+    }
+
+    BarChartViewModel leadGenerationSourceModel = new BarChartViewModel()
+            {
+                BarChartId = "LeadGenerationSourceChart",
+                XValues = JsonConvert.SerializeObject(XValuesBarLeadGenerationSource),
+                YValues = JsonConvert.SerializeObject(YValuesBarLeadGenerationSource),
+                XAxisLabel = "Lead Generation Source",
+                YAxisLabel = "Count",
+                BackgroundColor = JsonConvert.SerializeObject(backgroundColor),
+            };
+}
+<div class="page-content dashboard-wrapper">
+    <div class="container-fluid">
+        <!-- Page-Title -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="page-title-box pt-0 pb-0">
+                    <div class="row">
+                        @* <div class="col"> *@
+                        @*  <h4 class="page-title">Analytics</h4>
+                        <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Dastone</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0);">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Analytics</li>
+                        </ol> *@
+                        @*  </div> *@
+                        <div class="col text-end " id="DataTablesDivId" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                            @Html.Partial("~/Views/Shared/Dashboard/_DashboardDaysDropDown.cshtml", Model.NumberOfDaysRecord)
+                        </div>
+                        <div class="col-auto align-self-center" class="col text-end">
+                            <a href="#" class="btn btn-sm btn-outline-primary" id="Dash_Date">
+                                <span class="day-name" id="Day_Name">Today:</span>&nbsp;
+                                <span class="" id="Select_date">@System.DateTime.Now.ToCoditechDateFormat()</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar align-self-center icon-xs ms-1"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            </a>
+                            @*  <a href="#" class="btn btn-sm btn-outline-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download align-self-center icon-xs"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            </a> *@
+                        </div>
+                    </div>
+                </div><!--end page-title-box-->
+            </div>
+        </div>
+        <!-- end page title end breadcrumb -->
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-3">
+                <div class="card report-card">
+                    <a href="../gymmemberdetails/activememberlist">
+                        <div class="card-body">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col">
+                                    <p class="text-dark mb-0 fw-semibold">Active Member</p>
+                                    <h3 class="m-0">@Model.ActiveMemberCount</h3>
+                                    <p class="mb-0 text-truncate text-muted">&nbsp;@* <span class="text-success"><i class="mdi mdi-trending-up"></i>8.5%</span> New Sessions Today *@</p>
+                                </div>
+                                <div class="col-auto align-self-center">
+                                    <div class="report-main-icon bg-light-alt">
+                                        <i class="fas fa-user-check"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end card-body-->
+                    </a>
+                </div><!--end card-->
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card report-card">
+                    <a href="../gymmemberdetails/inactivememberlist">
+                        <div class="card-body">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col">
+                                    <p class="text-dark mb-0 fw-semibold">InActive Member</p>
+                                    <h3 class="m-0">@Model.InActiveMemberCount</h3>
+                                    <p class="mb-0 text-truncate text-muted">&nbsp;@* <span class="text-success"><i class="mdi mdi-trending-up"></i>8.5%</span> New Sessions Today *@</p>
+                                </div>
+                                <div class="col-auto align-self-center">
+                                    <div class="report-main-icon bg-light-alt">
+                                        <i class="fas fa-user-minus"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end card-body-->
+                    </a>
+                </div><!--end card-->
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card report-card">
+                    <a href="../gymmemberdetails/list">
+                        <div class="card-body">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col">
+                                    <p class="text-dark mb-0 fw-semibold">Total Registered Member</p>
+                                    <h3 class="m-0">@Model.TotalMemberCount</h3>
+                                    <p class="mb-0 text-truncate text-muted">&nbsp;@* <span class="text-success"><i class="mdi mdi-trending-up"></i>8.5%</span> New Sessions Today *@</p>
+                                </div>
+                                <div class="col-auto align-self-center">
+                                    <div class="report-main-icon bg-light-alt">
+                                        <i class="fas fa-user-friends"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end card-body-->
+                    </a>
+                </div><!--end card-->
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card report-card">
+                    <a href="../generalleadgenerationmaster/list">
+                        <div class="card-body">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col">
+                                    <p class="text-dark mb-0 fw-semibold">Total Leads</p>
+                                    <h3 class="m-0">@Model.TotalLeads</h3>
+                                    <p class="mb-0 text-truncate text-muted">&nbsp;@* <span class="text-success"><i class="mdi mdi-trending-up"></i>8.5%</span> New Sessions Today *@</p>
+                                </div>
+                                <div class="col-auto align-self-center">
+                                    <div class="report-main-icon bg-light-alt">
+                                        <i class="fas fa-bullhorn"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end card-body-->
+                    </a>
+                </div><!--end card-->
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card report-card">
+                    <div class="card-body">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col">
+                                <p class="text-dark mb-0 fw-semibold">Today's Collection</p>
+                                <h3 class="m-0">@AdminGeneralHelper.FormatPriceWithCurrency(@Model.ToadysTotalCollection)</h3>
+                                <p class="mb-0 text-truncate text-muted">&nbsp;@* <span class="text-success"><i class="mdi mdi-trending-up"></i>8.5%</span> New Sessions Today *@</p>
+                            </div>
+                            <div class="col-auto align-self-center">
+                                <div class="report-main-icon bg-light-alt">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end card-body-->
+                </div><!--end card-->
+            </div>
+            @if (@Model.NumberOfDaysRecord > 0)
+            {
+                <div class="col-md-6 col-lg-3">
+                    <div class="card report-card">
+                        <div class="card-body">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col">
+                                    @if (@Model.NumberOfDaysRecord > 1)
+                                    {
+                                        <p class="text-dark mb-0 fw-semibold">Last @Model.NumberOfDaysRecord Days Collection</p>
+                                    }
+                                    else if (@Model.NumberOfDaysRecord == 1)
+                                    {
+                                        <p class="text-dark mb-0 fw-semibold">Yesterday's Collection</p>
+                                    }
+                                    <h3 class="m-0">@AdminGeneralHelper.FormatPriceWithCurrency(@Model.DaywiseTotalCollection)</h3>
+                                    <p class="mb-0 text-truncate text-muted">&nbsp;@* <span class="text-success"><i class="mdi mdi-trending-up"></i>8.5%</span> New Sessions Today *@</p>
+                                </div>
+                                <div class="col-auto align-self-center">
+                                    <div class="report-main-icon bg-light-alt">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end card-body-->
+                    </div><!--end card-->
+                </div>
+            }
+            <div class="col-md-6 col-lg-3">
+                <div class="card report-card">
+                    <div class="card-body">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col">
+                                <p class="text-dark mb-0 fw-semibold">Digital Payment Collection</p>
+                                <h3 class="m-0">@AdminGeneralHelper.FormatPriceWithCurrency(@Model.DigitalPaymentCollection)</h3>
+                                <p class="mb-0 text-truncate text-muted">&nbsp;@* <span class="text-success"><i class="mdi mdi-trending-up"></i>8.5%</span> New Sessions Today *@</p>
+                            </div>
+                            <div class="col-auto align-self-center">
+                                <div class="report-main-icon bg-light-alt">
+                                    <i class="fas fa-money-check"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end card-body-->
+                </div><!--end card-->
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card report-card">
+                    <div class="card-body">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col">
+                                <p class="text-dark mb-0 fw-semibold">Manual Payment Collection</p>
+                                <h3 class="m-0">@AdminGeneralHelper.FormatPriceWithCurrency(@Model.ManualPaymentCollection)</h3>
+                                <p class="mb-0 text-truncate text-muted">&nbsp;@* <span class="text-success"><i class="mdi mdi-trending-up"></i>8.5%</span> New Sessions Today *@</p>
+                            </div>
+                            <div class="col-auto align-self-center">
+                                <div class="report-main-icon bg-light-alt">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end card-body-->
+                </div><!--end card-->
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-lg-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h4 class="card-title text-dark">Active & InActive Members</h4>
+                            </div>
+                        </div>
+                    </div><!--end card-header-->
+                    <div class="card-body scroll-wrapper">
+                        <div class="text-center" style="position: relative; padding-top:0px !important">
+                            @Html.Partial("~/Views/Shared/Charts/_PieChart.cshtml", activeInActiveMemberPieChart)
+                        </div><!--end card-body-->
+                    </div><!--end card-->
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                @if (@Model.NumberOfDaysRecord > 1)
+                                {
+                                    <h4 class="card-title">Revenue By Payment Mode(Last @Model.NumberOfDaysRecord Days)</h4>
+                                }
+                                else if (@Model.NumberOfDaysRecord == 1)
+                                {
+                                    <h4 class="card-title">Revenue By Payment Mode(Yesterday)</h4>
+                                }
+                                else if (@Model.NumberOfDaysRecord == 0)
+                                {
+                                    <h4 class="card-title">Revenue By Payment Mode(Today)</h4>
+                                }
+                            </div><!--end col-->
+                        </div>  <!--end row-->
+                    </div><!--end card-header-->
+                    <div class="card-body scroll-wrapper">
+                        @{
+                            decimal? sum = Model?.RevenueByPaymentModeList?.Sum(x => x.BillAmount);
+                        }
+                        @foreach (var item in Model?.RevenueByPaymentModeList)
+                        {
+                            int percentage = @item.BillAmount > 0 ? Convert.ToInt32((@item.BillAmount * 100) / sum) : 0;
+                            string image = $"{@item.PaymentType.Replace(" ", "")}.png";
+                            <div class="border-bottom-dashed mb-4">
+                                <div class="media mb-3">
+                                    <img src="../assets/images/@image" height="40" class="me-3 align-self-center rounded" alt="...">
+                                    <div class="media-body align-self-center">
+                                        <h6 class="mt-0 mb-1">@item.PaymentType</h6>
+                                        <p class="text-muted mb-1"><span class="text-success">@AdminGeneralHelper.FormatPriceWithCurrency(@item.BillAmount)</span></p>
+                                        <small class="float-end text-muted ms-3 font-11">@percentage %</small>
+                                        <div class="progress mt-2" style="height:4px;">
+                                            <div class="progress-bar bg-warning-50" role="progressbar" style="width: @percentage%; border-radius:5px;" aria-valuenow="@percentage" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div><!--end media body-->
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div><!--end card-->
+            </div> <!--end col-->
+            <div class="col-lg-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h4 class="card-title">Current Month Events</h4>
+                            </div><!--end col-->
+                        </div>  <!--end row-->
+                    </div><!--end card-header-->
+                    <div class="card-body scroll-wrapper">
+                        <div class="analytic-dash-activity" data-simplebar="init">
+                            <div class="simplebar-wrapper" style="margin: 0px;">
+                                <div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask">
+                                    <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                        <div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden scroll;">
+                                            <div class="simplebar-content" style="padding: 0px;">
+                                                <div class="activity">
+                                                    @foreach (var item in Model?.GymUpcomingEventsList)
+                                                    {
+                                                        string image = $"{@item.Type.Replace(" ", "")}.jpg";
+                                                        <div class="activity-info">
+                                                            <div class="icon-info-activity">
+                                                                <img src="../assets/images/@image" height="40" class="align-self-center rounded" alt="...">
+                                                            </div>
+                                                            <div class="activity-info-text">
+
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <p class="text-muted mb-0 font-13 w-75">
+                                                                        <span>
+                                                                            @if (item.Type == "DateOfBirth")
+                                                                            {
+                                                                                <text>
+                                                                                    <span style="font-weight:bold">Happy Birthday @item.FirstName @item.LastName</span> Wishing you a joyful day and a wonderful year ahead!
+                                                                                </text>
+                                                                            }
+                                                                            else if (item.Type == "MarriageAnniversary")
+                                                                            {
+                                                                                <text>
+                                                                                    <span style="font-weight:bold">Happy Marriage Anniversary @item.FirstName @item.LastName</span> <br /> Cheers to your beautiful journey together!
+                                                                                </text>
+                                                                            }
+                                                                        </span>
+                                                                    </p>
+                                                                    <small class="text-muted">@item.DayNumber @item.MonthName</small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div><!--end activity-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><div class="simplebar-placeholder" style="width: auto; height: 395px;"></div>
+                            </div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="width: 0px; display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 301px; transform: translate3d(0px, 0px, 0px); display: block;"></div></div>
+                        </div><!--end analytics-dash-activity-->
+                    </div>  <!--end card-body-->
+                </div><!--end card-->
+            </div> <!--end col-->
+        </div>
+        <div class="row mb-3">
+            <div class="col-lg-6">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h4 class="card-title">Last 30 Days Financial Overview</h4>
+                            </div>
+                        </div>
+                    </div><!--end card-header-->
+                    <div class="card-body ">
+                        <div class="text-center" style="position: relative; padding-top:0px !important">
+                            @Html.Partial("~/Views/Shared/Charts/_BarChart.cshtml", transactionOverviewModel)
+                        </div><!--end card-body-->
+                    </div><!--end card-body-->
+                </div><!--end card-->
+            </div>
+            <div class="col-lg-6">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h4 class="card-title">Last 30 Days Lead Source</h4>
+                            </div><!--end col-->
+                        </div>  <!--end row-->
+                    </div><!--end card-header-->
+                    <div class="card-body scroll-wrapper">
+                        <div class="" style="position: relative;">
+                            @Html.Partial("~/Views/Shared/Charts/_BarChart.cshtml", leadGenerationSourceModel)
+                        </div>
+                    </div><!--end card-body-->
+                </div><!--end card-->
+            </div> <!--end col-->
+        </div>
+        <div class="row mb-3">
+            <div class="col-lg-12">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                @if (@Model.NumberOfDaysRecord > 1)
+                                {
+                                    <h4 class="card-title">Upcoming Plan Expiration Members(In @Model.NumberOfDaysRecord Days)</h4>
+                                }
+                                else if (@Model.NumberOfDaysRecord == 1)
+                                {
+                                    <h4 class="card-title">Upcoming Plan Expiration Members(Yesterday)</h4>
+                                }
+                                else if (@Model.NumberOfDaysRecord == 0)
+                                {
+                                    <h4 class="card-title">Upcoming Plan Expiration Members(Today)</h4>
+                                }
+                            </div><!--end col-->
+                        </div>  <!--end row-->
+                    </div><!--end card-header-->
+                    <div class="card-body scroll-wrapper">
+                        <div class="table-responsive browser_users">
+                            <table class="table mb-0">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th class="border-top-0">Name</th>
+                                        <th class="border-top-0">Contact Number</th>
+                                        <th class="border-top-0">Plan Name</th>
+                                        <th class="border-top-0">Plan Duration</th>
+                                        <th class="border-top-0">Days Until Expiry</th>
+                                    </tr><!--end tr-->
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model?.GymUpcomingPlanExpirationMembersList)
+                                    {
+                                        <tr>
+                                            <td><a href="/gymmemberdetails/UpdateMemberPersonalDetails?gymMemberDetailId=@item.GymMemberDetailId&personId=@item.PersonId" class="text-primary">@item.FirstName @item.LastName</a></td>
+                                            <td>@item.MobileNumber</td>
+                                            <td>@item.MembershipPlanName</td>
+                                            <td>@item.PlanStartDate.ToCoditechDateFormat() To @item.PlanDurationExpirationDate.ToCoditechDateFormat()</td>
+                                            <td>
+                                                @if (item.PlanDurationExpiredInDays == 1)
+                                                {
+                                                    @(item.PlanDurationExpiredInDays + " Day Left")
+                                                }
+                                                else
+                                                {
+                                                    @(item.PlanDurationExpiredInDays + " Days Left")
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table> <!--end table-->
+                        </div><!--end /div-->
+                    </div><!--end card-body-->
+                </div><!--end card-->
+            </div> <!--end col-->
+        </div><!--end row-->
+
+    </div><!-- container -->
+</div>

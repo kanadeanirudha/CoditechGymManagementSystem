@@ -1,0 +1,53 @@
+﻿@model GymMemberMembershipPlanListViewModel
+@{
+    Layout = null;
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string actionName = ViewContext.RouteData.Values["action"].ToString();
+}
+<div class="row">
+    @Html.Partial("~/Views/Shared/Datatable/_DatatableShowResult.cshtml", Model.PageListViewModel.RecordPerPage)
+    @Html.Partial("~/Views/Shared/Datatable/_DatatableSearchData.cshtml", Model.PageListViewModel.SearchBy)
+</div>
+<div class="row">
+    <div class="col-sm-12 table-responsive">
+        <table id="datatable" class="action-set table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline" style="border-collapse: collapse; border-spacing: 0px; width: 100%;" role="grid" aria-describedby="datatable_info">
+            @Html.Partial("~/Views/Shared/Datatable/_DatatableColumns.cshtml", Model.PageListViewModel)
+            @Html.HiddenFor(x => x.SelectedParameter1)
+            @Html.HiddenFor(x => x.SelectedParameter2)
+
+            <tbody>
+                @if (Model?.GymMemberMembershipPlanList?.Count > 0)
+                {
+                    foreach (var item in Model?.GymMemberMembershipPlanList)
+                    {
+                        <tr>
+                            <td>@item.PlanType</td>
+                            <td>
+                                <div class="plan-details">
+                                    @item.MembershipPlanName<br />
+                                    @if (item.PlanDurationType.Equals(AdminConstants.PlanDurationType, StringComparison.InvariantCultureIgnoreCase))
+                                    {
+                                        <span style="font-size: 12px; font-style: italic;">
+                                            <i class="fa fa-calendar-alt icon"></i>@Convert.ToDateTime(@item.PlanStartDate).ToCoditechDateFormat() to @Convert.ToDateTime(@item.PlanDurationExpirationDate).ToCoditechDateFormat()
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span style="font-size: 12px; font-style: italic;">
+                                            <i class="fa fa-clock icon"></i> Session: @item.PlanDurationInSession by @item.RemainingSessionCount
+                                        </span>
+                                    }
+                                </div>
+                            </td>
+                            <td>@Html.Partial("~/Views/Shared/Datatable/_DatatableTrueFalse.cshtml", item.IsExpired)</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@Html.Partial("~/Views/Shared/Datatable/_DatatablePagination.cshtml", Model.PageListViewModel)
+
+

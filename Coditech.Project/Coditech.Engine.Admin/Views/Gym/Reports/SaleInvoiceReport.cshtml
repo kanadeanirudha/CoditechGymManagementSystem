@@ -1,0 +1,116 @@
+﻿@model GymMemberSalesInvoiceReportViewModel
+@{
+    ViewBag.Title = "Sale Invoice Report";
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string actionName = ViewContext.RouteData.Values["action"].ToString();
+    DropdownViewModel centreDropdown = new DropdownViewModel() { DropdownType = DropdownTypeEnum.AccessibleCentre.ToString(), DropdownName = "SelectedCentreCode" };
+}
+<!-- Page Content-->
+<div class="page-content mt-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Sales Invoice Reports</span>
+                    </div>
+                    <div class="card-header">
+                        @using (Html.BeginForm("SaleInvoiceReport", controllerName, FormMethod.Post))
+                        {
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <label class="form-label">@AdminResources.LabelCentre</label>
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", centreDropdown)
+                                    @Html.ValidationMessageFor(x => x.SelectedCentreCode)
+                                </div>
+                                <div class="col-md-1">
+                                    <label class="form-label">Report Type</label>
+                                </div>
+
+                                <div class="col-md-1">
+                                    @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", new DropdownViewModel()
+                           {
+                               DropdownType = DropdownTypeEnum.ReportType.ToString(),
+                               DropdownName = "ReportType",
+                               DropdownSelectedValue = Model.ReportType ?? string.Empty,
+                           })
+                                    @Html.ValidationMessageFor(x => x.ReportType)
+                                </div>
+                                <div class="col-md-1">
+                                    @Html.LabelFor(x => x.FromDate, new { @class = "form-label" })
+                                </div>
+                                <div class="col-md-1">
+                                    @Html.TextBoxFor(x => x.FromDate, AdminGeneralHelper.DateFormatForTextBox(), new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                                <div class="col-md-1">
+                                    @Html.LabelFor(x => x.ToDate, new { @class = "form-label" })
+                                </div>
+                                <div class="col-md-1">
+                                    @Html.TextBoxFor(x => x.ToDate, AdminGeneralHelper.DateFormatForTextBox(), new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="submit" class="btn btn-success">Show</button>
+                                </div>
+                            </div>
+                        }
+
+                        @if (!Model.IsRecordFound)
+                        {
+                            <div class="row">
+                                <div class="col-sm-12 col-md-5">
+                                    <span>No Result Found</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end page content -->
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            $("#FromDate").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: "@AdminGeneralHelper.DateFormatForCalendar()",
+                language: "en",
+                autoSize: true,
+                gotoCurrent: true,
+                clearBtn: true,
+                showButtonPanel: true,
+                closeText: 'Clear',
+                onClose: function (dateText, inst) {
+                    if ($(window.event.srcElement).hasClass('ui-datepicker-close')) {
+                        document.getElementById(this.id).value = '';
+                    }
+                },
+                maxDate: new Date(),
+            });
+        });
+        $(function () {
+            $("#ToDate").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: "@AdminGeneralHelper.DateFormatForCalendar()",
+                language: "en",
+                autoSize: true,
+                gotoCurrent: true,
+                clearBtn: true,
+                showButtonPanel: true,
+                closeText: 'Clear',
+                onClose: function (dateText, inst) {
+                    if ($(window.event.srcElement).hasClass('ui-datepicker-close')) {
+                        document.getElementById(this.id).value = '';
+                    }
+                },
+                maxDate: new Date(),
+            });
+        });
+    </script>
+}
+

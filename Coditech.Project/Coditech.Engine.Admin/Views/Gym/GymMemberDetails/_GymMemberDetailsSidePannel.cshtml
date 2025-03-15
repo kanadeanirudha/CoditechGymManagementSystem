@@ -1,0 +1,41 @@
+﻿@using Coditech.Admin.Utilities;
+@model Dictionary<string, string>
+@{
+    Layout = null;
+    int gymMemberDetailId = Convert.ToInt32(Model?.FirstOrDefault(x => x.Key == "GymMemberDetailId").Value);
+    long personId = Convert.ToInt64(Model?.FirstOrDefault(x => x.Key == "PersonId").Value);
+    string actionName = ViewContext.RouteData.Values["action"].ToString();
+}
+<div class="card sidebar-card">
+    <div class="card-body">
+        <div class="files-nav">
+            <div class="nav flex-column nav-pills" id="files-tab" aria-orientation="vertical">
+                <a class="nav-link" href="/GymMemberDetails/UpdateMemberPersonalDetails?gymMemberDetailId=@gymMemberDetailId&personId=@personId" aria-selected="true">
+                    <i class="ti-menu"></i><h5 class="m-0 ps-2">Personal Details</h5>
+                </a>
+                <a class="nav-link" href="/GymMemberDetails/MemberOtherDetails?gymMemberDetailId=@gymMemberDetailId" aria-selected="true">
+                    <i class="fas fa-info-circle"></i><h5 class="m-0 ps-2">Other Details</h5>
+                </a>
+                <a class="nav-link" href="/GymMemberDetails/GetGymMemberMembershipPlan?SelectedParameter1=@gymMemberDetailId&SelectedParameter2=@personId" aria-selected="true">
+                    <i class="fas fa-id-card-alt"></i><h5 class="m-0 ps-2">Membership Plan</h5>
+                </a>
+                <a class="nav-link" href="/GymMemberDetails/MemberPaymentHistoryList?SelectedParameter1=@gymMemberDetailId&SelectedParameter2=@personId" aria-selected="true">
+                    <i class="fas fa-history"></i><h5 class="m-0 ps-2">Payment History</h5>
+                </a>
+                <a class="nav-link" href="/GymMemberDetails/CreateEditGymMemberAddress?gymMemberDetailId=@gymMemberDetailId&personId=@personId" aria-selected="true">
+                    <i class="fas fa-map-marker-alt"></i><h5 class="m-0 ps-2">Address</h5>
+                </a>
+                <a class="nav-link" href="/gymmemberdetails/GetBodyMeasurementTypeListByMemberId?gymMemberDetailId=@gymMemberDetailId&personId=@personId" aria-selected="true">
+                    <i class="fas fa-ruler"></i><h5 class="m-0 ps-2">Body Measurement</h5>
+                </a>
+                <a class="nav-link" href="/GymMemberDetails/MemberFollowUpList?SelectedParameter1=@gymMemberDetailId&SelectedParameter2=@personId" aria-selected="true">
+                    <i class="fas fa-handshake"></i><h5 class="m-0 ps-2">Follow-up</h5>
+                </a>
+                <a class="nav-link" href="/GymMemberDetails/MemberAttendanceDetails?SelectedParameter1=@gymMemberDetailId&SelectedParameter2=@personId" aria-selected="true">
+                    <i class="fas fa-calendar-check"></i><h5 class="m-0 ps-2">Attendance Details</h5>
+                </a>
+             
+            </div>
+        </div>
+    </div>
+</div>
