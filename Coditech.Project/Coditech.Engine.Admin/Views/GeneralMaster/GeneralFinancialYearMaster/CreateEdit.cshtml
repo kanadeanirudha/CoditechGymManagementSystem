@@ -52,20 +52,20 @@
                                         @Html.ValidationMessageFor(x => x.ToDate)
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row-lg-grow-1">
-                                <div class="mb-3">
-                                    @Html.LabelFor(x => x.IsCurrentFinancialYear, new { @class = "form-label" })
-                                    <div class="form-check">
-                                        @Html.CheckBoxFor(x => x.IsCurrentFinancialYear, new { @class = "form-check-input" })
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.IsYearEnd, new { @class = "form-label" })
+                                        <div class="form-check">
+                                            @Html.CheckBoxFor(x => x.IsYearEnd, new { @class = "form-check-input" })
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row-lg-6">
-                                <div class="mb-3">
-                                    @Html.LabelFor(x => x.IsYearEnd, new { @class = "form-label" })
-                                    <div class="form-check">
-                                        @Html.CheckBoxFor(x => x.IsYearEnd, new { @class = "form-check-input" })
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        @Html.LabelFor(x => x.IsCurrentFinancialYear, new { @class = "form-label" })
+                                        <div class="form-check">
+                                            @Html.CheckBoxFor(x => x.IsCurrentFinancialYear, new { @class = "form-check-input" })
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -80,7 +80,7 @@
 </div>
 @section scripts {
     <script type="text/javascript">
-                $(function () {
+        $(function () {
             function restrictDateRange(datepicker, minDate, maxDate) {
                 datepicker.datepicker("option", "minDate", minDate);
                 datepicker.datepicker("option", "maxDate", maxDate);
