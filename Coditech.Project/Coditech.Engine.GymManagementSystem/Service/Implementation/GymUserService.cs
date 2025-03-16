@@ -22,8 +22,8 @@ namespace Coditech.API.Service
             _serviceProvider = serviceProvider;
             _coditechLogging = coditechLogging;
             _userMasterRepository = new CoditechRepository<UserMaster>(_serviceProvider.GetService<Coditech_Entities>());
-            _gymMemberDetailsRepository = new CoditechRepository<GymMemberDetails>(_serviceProvider.GetService<Coditech_Entities>());
             _generalPersonRepository = new CoditechRepository<GeneralPerson>(_serviceProvider.GetService<Coditech_Entities>());
+            _gymMemberDetailsRepository = new CoditechRepository<GymMemberDetails>(_serviceProvider.GetService<CoditechCustom_Entities>());
         }
 
         public virtual GymUserModel Login(UserLoginModel userLoginModel)

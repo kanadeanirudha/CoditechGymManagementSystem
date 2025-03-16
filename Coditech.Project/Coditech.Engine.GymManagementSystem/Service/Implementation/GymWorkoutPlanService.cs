@@ -26,10 +26,10 @@ namespace Coditech.API.Service
         {
             _serviceProvider = serviceProvider;
             _coditechLogging = coditechLogging;
-            _gymWorkoutPlanRepository = new CoditechRepository<GymWorkoutPlan>(_serviceProvider.GetService<Coditech_Entities>());
-            _gymWorkoutPlanDetailsRepository = new CoditechRepository<GymWorkoutPlanDetails>(_serviceProvider.GetService<Coditech_Entities>());
-            _gymWorkoutPlanSetRepository = new CoditechRepository<GymWorkoutPlanSet>(_serviceProvider.GetService<Coditech_Entities>());
-            _gymWorkoutPlanUserRepository = new CoditechRepository<GymWorkoutPlanUser>(_serviceProvider.GetService<Coditech_Entities>());
+            _gymWorkoutPlanRepository = new CoditechRepository<GymWorkoutPlan>(_serviceProvider.GetService<CoditechCustom_Entities>());
+            _gymWorkoutPlanDetailsRepository = new CoditechRepository<GymWorkoutPlanDetails>(_serviceProvider.GetService<CoditechCustom_Entities>());
+            _gymWorkoutPlanSetRepository = new CoditechRepository<GymWorkoutPlanSet>(_serviceProvider.GetService<CoditechCustom_Entities>());
+            _gymWorkoutPlanUserRepository = new CoditechRepository<GymWorkoutPlanUser>(_serviceProvider.GetService<CoditechCustom_Entities>());
         }
 
         public virtual GymWorkoutPlanListModel GetGymWorkoutPlanList(FilterCollection filters, NameValueCollection sorts, NameValueCollection expands, int pagingStart, int pagingLength)
@@ -41,7 +41,7 @@ namespace Coditech.API.Service
 
             //Bind the Filter, sorts & Paging details.
             PageListModel pageListModel = new PageListModel(filters, sorts, pagingStart, pagingLength);
-            CoditechViewRepository<GymWorkoutPlanModel> objStoredProc = new CoditechViewRepository<GymWorkoutPlanModel>(_serviceProvider.GetService<Coditech_Entities>());
+            CoditechViewRepository<GymWorkoutPlanModel> objStoredProc = new CoditechViewRepository<GymWorkoutPlanModel>(_serviceProvider.GetService<CoditechCustom_Entities>());
             objStoredProc.SetParameter("@CentreCode", selectedCentreCode, ParameterDirection.Input, DbType.String);
             objStoredProc.SetParameter("@WhereClause", pageListModel?.SPWhereClause, ParameterDirection.Input, DbType.String);
             objStoredProc.SetParameter("@PageNo", pageListModel.PagingStart, ParameterDirection.Input, DbType.Int32);
@@ -197,7 +197,7 @@ namespace Coditech.API.Service
             if (IsNull(parameterModel))
                   throw new CoditechException(ErrorCodes.IdLessThanOne, string.Format(GeneralResources.ErrorIdLessThanOne, "GymWorkoutPlanId"));
 
-            CoditechViewRepository<View_ReturnBoolean> objStoredProc = new CoditechViewRepository<View_ReturnBoolean>(_serviceProvider.GetService<Coditech_Entities>());
+            CoditechViewRepository<View_ReturnBoolean> objStoredProc = new CoditechViewRepository<View_ReturnBoolean>(_serviceProvider.GetService<CoditechCustom_Entities>());
             objStoredProc.SetParameter("GymWorkoutplanDeleteType", parameterModel.GymWorkoutplanDeleteType, ParameterDirection.Input, DbType.String);
             objStoredProc.SetParameter("GymWorkoutPlanId", parameterModel.GymWorkoutPlanId, ParameterDirection.Input, DbType.Int64);
             objStoredProc.SetParameter("WorkoutWeekNumber", parameterModel.WorkoutWeekNumber, ParameterDirection.Input, DbType.Int16);
@@ -215,7 +215,7 @@ namespace Coditech.API.Service
 
             //Bind the Filter, sorts & Paging details.
             PageListModel pageListModel = new PageListModel(filters, sorts, pagingStart, pagingLength);
-            CoditechViewRepository<GymWorkoutPlanUserModel> objStoredProc = new CoditechViewRepository<GymWorkoutPlanUserModel>(_serviceProvider.GetService<Coditech_Entities>());
+            CoditechViewRepository<GymWorkoutPlanUserModel> objStoredProc = new CoditechViewRepository<GymWorkoutPlanUserModel>(_serviceProvider.GetService<CoditechCustom_Entities>());
             objStoredProc.SetParameter("@GymWorkoutPlanId", gymWorkoutPlanId, ParameterDirection.Input, DbType.Int64);
             objStoredProc.SetParameter("@WhereClause", pageListModel?.SPWhereClause, ParameterDirection.Input, DbType.String);
             objStoredProc.SetParameter("@Rows", pageListModel.PagingLength, ParameterDirection.Input, DbType.Int32);

@@ -22,14 +22,14 @@ namespace Coditech.API.Service
         {
             _serviceProvider = serviceProvider;
             _coditechLogging = coditechLogging;
-            _gymBodyMeasurementTypeRepository = new CoditechRepository<GymBodyMeasurementType>(_serviceProvider.GetService<Coditech_Entities>());
+            _gymBodyMeasurementTypeRepository = new CoditechRepository<GymBodyMeasurementType>(_serviceProvider.GetService<CoditechCustom_Entities>());
         }
 
         public virtual GymBodyMeasurementTypeListModel GetGymBodyMeasurementTypeList(FilterCollection filters, NameValueCollection sorts, NameValueCollection expands, int pagingStart, int pagingLength)
         {
             //Bind the Filter, sorts & Paging details.
             PageListModel pageListModel = new PageListModel(filters, sorts, pagingStart, pagingLength);
-            CoditechViewRepository<GymBodyMeasurementTypeModel> objStoredProc = new CoditechViewRepository<GymBodyMeasurementTypeModel>(_serviceProvider.GetService<Coditech_Entities>());
+            CoditechViewRepository<GymBodyMeasurementTypeModel> objStoredProc = new CoditechViewRepository<GymBodyMeasurementTypeModel>(_serviceProvider.GetService<CoditechCustom_Entities>());
             objStoredProc.SetParameter("@WhereClause", pageListModel?.SPWhereClause, ParameterDirection.Input, DbType.String);
             objStoredProc.SetParameter("@PageNo", pageListModel.PagingStart, ParameterDirection.Input, DbType.Int32);
             objStoredProc.SetParameter("@Rows", pageListModel.PagingLength, ParameterDirection.Input, DbType.Int32);
@@ -109,7 +109,7 @@ namespace Coditech.API.Service
             if (IsNull(parameterModel) || string.IsNullOrEmpty(parameterModel.Ids))
                 throw new CoditechException(ErrorCodes.IdLessThanOne, string.Format(GeneralResources.ErrorIdLessThanOne, "GymBodyMeasurementTypeID"));
 
-            CoditechViewRepository<View_ReturnBoolean> objStoredProc = new CoditechViewRepository<View_ReturnBoolean>(_serviceProvider.GetService<Coditech_Entities>());
+            CoditechViewRepository<View_ReturnBoolean> objStoredProc = new CoditechViewRepository<View_ReturnBoolean>(_serviceProvider.GetService<CoditechCustom_Entities>());
             objStoredProc.SetParameter("GymBodyMeasurementTypeId", parameterModel.Ids, ParameterDirection.Input, DbType.String);
             objStoredProc.SetParameter("Status", null, ParameterDirection.Output, DbType.Int32);
             int status = 0;

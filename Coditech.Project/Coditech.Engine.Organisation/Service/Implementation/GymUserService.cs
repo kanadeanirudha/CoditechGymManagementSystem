@@ -19,7 +19,7 @@ namespace Coditech.API.Service
         {
             _serviceProvider = serviceProvider;
             _coditechLogging = coditechLogging;
-            _gymMemberDetailsRepository = new CoditechRepository<GymMemberDetails>(_serviceProvider.GetService<Coditech_Entities>());
+            _gymMemberDetailsRepository = new CoditechRepository<GymMemberDetails>(_serviceProvider.GetService<CoditechCustom_Entities>());
         }
 
         protected override GeneralPersonModel GetGeneralPersonDetailsByEntityType(long entityId, string entityType)
@@ -30,7 +30,7 @@ namespace Coditech.API.Service
             short generalDepartmentMasterId = 0;
             if (entityType == UserTypeCustomEnum.GymMember.ToString())
             {
-                GymMemberDetails gymMemberDetails = new CoditechRepository<GymMemberDetails>(_serviceProvider.GetService<Coditech_Entities>()).Table.Where(x => x.GymMemberDetailId == entityId)?.FirstOrDefault();
+                GymMemberDetails gymMemberDetails = new CoditechRepository<GymMemberDetails>(_serviceProvider.GetService<CoditechCustom_Entities>()).Table.Where(x => x.GymMemberDetailId == entityId)?.FirstOrDefault();
                 if (IsNotNull(gymMemberDetails))
                 {
                     personId = gymMemberDetails.PersonId;
