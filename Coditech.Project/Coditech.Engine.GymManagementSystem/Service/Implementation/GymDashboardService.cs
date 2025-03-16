@@ -102,7 +102,7 @@ namespace Coditech.API.Service
         }
         protected virtual DataSet GetGymDashboardDetails(short numberOfDaysRecord,long userId, string dashboardForm)
         {
-            ExecuteSpHelper objStoredProc = new ExecuteSpHelper(_serviceProvider.GetService<Coditech_Entities>());
+            ExecuteSpHelper objStoredProc = new ExecuteSpHelper(_serviceProvider.GetService<CoditechCustom_Entities>());
             objStoredProc.GetParameter("@UserId", userId, ParameterDirection.Input, SqlDbType.BigInt);
             objStoredProc.GetParameter("@NumberOfDaysRecord", numberOfDaysRecord, ParameterDirection.Input, SqlDbType.SmallInt);
             objStoredProc.GetParameter("@DashboardFor", dashboardForm, ParameterDirection.Input, SqlDbType.VarChar);

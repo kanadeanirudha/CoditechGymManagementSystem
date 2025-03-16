@@ -28,12 +28,12 @@ namespace Coditech.API.Service
         {
             _serviceProvider = serviceProvider;
             _coditechLogging = coditechLogging;
-            _salesInvoiceMasterRepository = new CoditechRepository<SalesInvoiceMaster>(_serviceProvider.GetService<Coditech_Entities>());
-            _salesInvoiceDetailsRepository = new CoditechRepository<SalesInvoiceDetails>(_serviceProvider.GetService<Coditech_Entities>());
-            _gymMemberMembershipPlanRepository = new CoditechRepository<GymMemberMembershipPlan>(_serviceProvider.GetService<Coditech_Entities>());
-            _gymMembershipPlanRepository = new CoditechRepository<GymMembershipPlan>(_serviceProvider.GetService<Coditech_Entities>());
+            _gymMemberMembershipPlanRepository = new CoditechRepository<GymMemberMembershipPlan>(_serviceProvider.GetService<CoditechCustom_Entities>());
+            _gymMembershipPlanRepository = new CoditechRepository<GymMembershipPlan>(_serviceProvider.GetService<CoditechCustom_Entities>());
             _organisationCentrePrintingFormatRepository = new CoditechRepository<OrganisationCentrePrintingFormat>(_serviceProvider.GetService<Coditech_Entities>());
             _organisationCentreMasterRepository = new CoditechRepository<OrganisationCentreMaster>(_serviceProvider.GetService<Coditech_Entities>());
+            _salesInvoiceMasterRepository = new CoditechRepository<SalesInvoiceMaster>(_serviceProvider.GetService<Coditech_Entities>());
+            _salesInvoiceDetailsRepository = new CoditechRepository<SalesInvoiceDetails>(_serviceProvider.GetService<Coditech_Entities>());
         }
 
         public virtual GymMemberSalesInvoiceListModel GymMemberServiceSalesInvoiceList(string SelectedCentreCode, DateTime? fromDate, DateTime? toDate, FilterCollection filters, NameValueCollection sorts, NameValueCollection expands, int pagingStart, int pagingLength)
@@ -53,7 +53,7 @@ namespace Coditech.API.Service
             }
             // Bind the Filter, sorts & Paging shipPlan.
             PageListModel pageListModel = new PageListModel(filters, sorts, pagingStart, pagingLength);
-            CoditechViewRepository<GymMemberSalesInvoiceModel> objStoredProc = new CoditechViewRepository<GymMemberSalesInvoiceModel>(_serviceProvider.GetService<Coditech_Entities>());
+            CoditechViewRepository<GymMemberSalesInvoiceModel> objStoredProc = new CoditechViewRepository<GymMemberSalesInvoiceModel>(_serviceProvider.GetService<CoditechCustom_Entities>());
             objStoredProc.SetParameter("@CentreCode", SelectedCentreCode, ParameterDirection.Input, DbType.String);
             objStoredProc.SetParameter("@FromDate", fromDate, ParameterDirection.Input, DbType.Date);
             objStoredProc.SetParameter("@ToDate", toDate, ParameterDirection.Input, DbType.Date);

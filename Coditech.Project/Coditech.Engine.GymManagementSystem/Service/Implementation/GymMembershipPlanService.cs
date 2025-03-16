@@ -25,16 +25,16 @@ namespace Coditech.API.Service
         {
             _serviceProvider = serviceProvider;
             _coditechLogging = coditechLogging;
-            _gymMembershipPlanRepository = new CoditechRepository<GymMembershipPlan>(_serviceProvider.GetService<Coditech_Entities>());
-            _gymMemberMembershipPlanRepository = new CoditechRepository<GymMemberMembershipPlan>(_serviceProvider.GetService<Coditech_Entities>());
-            _gymMembershipPlanPackageRepository = new CoditechRepository<GymMembershipPlanPackage>(_serviceProvider.GetService<Coditech_Entities>());
+            _gymMembershipPlanRepository = new CoditechRepository<GymMembershipPlan>(_serviceProvider.GetService<CoditechCustom_Entities>());
+            _gymMemberMembershipPlanRepository = new CoditechRepository<GymMemberMembershipPlan>(_serviceProvider.GetService<CoditechCustom_Entities>());
+            _gymMembershipPlanPackageRepository = new CoditechRepository<GymMembershipPlanPackage>(_serviceProvider.GetService<CoditechCustom_Entities>());
         }
 
         public virtual GymMembershipPlanListModel GetGymMembershipPlanList(string SelectedCentreCode, FilterCollection filters, NameValueCollection sorts, NameValueCollection expands, int pagingStart, int pagingLength)
         {
             //Bind the Filter, sorts & Paging shipPlan.
             PageListModel pageListModel = new PageListModel(filters, sorts, pagingStart, pagingLength);
-            CoditechViewRepository<GymMembershipPlanModel> objStoredProc = new CoditechViewRepository<GymMembershipPlanModel>(_serviceProvider.GetService<Coditech_Entities>());
+            CoditechViewRepository<GymMembershipPlanModel> objStoredProc = new CoditechViewRepository<GymMembershipPlanModel>(_serviceProvider.GetService<CoditechCustom_Entities>());
             objStoredProc.SetParameter("@CentreCode", SelectedCentreCode, ParameterDirection.Input, DbType.String);
             objStoredProc.SetParameter("@WhereClause", pageListModel?.SPWhereClause, ParameterDirection.Input, DbType.String);
             objStoredProc.SetParameter("@PageNo", pageListModel.PagingStart, ParameterDirection.Input, DbType.Int32);
@@ -131,7 +131,7 @@ namespace Coditech.API.Service
             if (IsNull(parameterModel) || string.IsNullOrEmpty(parameterModel.Ids))
                 throw new CoditechException(ErrorCodes.IdLessThanOne, string.Format(GeneralResources.ErrorIdLessThanOne, "GymMembershipPlanId"));
 
-            CoditechViewRepository<View_ReturnBoolean> objStoredProc = new CoditechViewRepository<View_ReturnBoolean>(_serviceProvider.GetService<Coditech_Entities>());
+            CoditechViewRepository<View_ReturnBoolean> objStoredProc = new CoditechViewRepository<View_ReturnBoolean>(_serviceProvider.GetService<CoditechCustom_Entities>());
             objStoredProc.SetParameter("GymMembershipPlanIds", parameterModel.Ids, ParameterDirection.Input, DbType.String);
             objStoredProc.SetParameter("Status", null, ParameterDirection.Output, DbType.Int32);
             int status = 0;
@@ -146,7 +146,7 @@ namespace Coditech.API.Service
             if (IsNull(gymMembershipPlanId) || gymMembershipPlanId <= 0)
                 throw new CoditechException(ErrorCodes.IdLessThanOne, string.Format(GeneralResources.ErrorIdLessThanOne, "GymMembershipPlanId"));
 
-            CoditechViewRepository<View_ReturnBoolean> objStoredProc = new CoditechViewRepository<View_ReturnBoolean>(_serviceProvider.GetService<Coditech_Entities>());
+            CoditechViewRepository<View_ReturnBoolean> objStoredProc = new CoditechViewRepository<View_ReturnBoolean>(_serviceProvider.GetService<CoditechCustom_Entities>());
             objStoredProc.SetParameter("GymMembershipPlanId", gymMembershipPlanId, ParameterDirection.Input, DbType.String);
             objStoredProc.SetParameter("Status", null, ParameterDirection.Output, DbType.Int32);
             int status = 0;
