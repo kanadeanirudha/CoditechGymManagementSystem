@@ -521,6 +521,28 @@ namespace Coditech.API.Service
                 throw new CoditechException(ErrorCodes.InvalidData, "Follow-up comment is invalid.");
             }
         }
+
+        protected override GeneralPersonModel GetGeneralPersonDetailsByEntityType(long entityId, string entityType)
+        {
+            long personId = 0;
+            string centreCode = string.Empty;
+            string personCode = string.Empty;
+            short generalDepartmentMasterId = 0;
+            if (entityType == UserTypeCustomEnum.GymMember.ToString())
+            {
+                GymMemberDetails gymMemberDetails = new CoditechRepository<GymMemberDetails>(_serviceProvider.GetService<CoditechCustom_Entities>()).Table.Where(x => x.GymMemberDetailId == entityId)?.FirstOrDefault();
+                if (IsNotNull(gymMemberDetails))
+                {
+                    personId = gymMemberDetails.PersonId;
+                    centreCode = gymMemberDetails.CentreCode;
+                }
+                return base.BindGeneralPersonInformation(personId, centreCode, personCode, generalDepartmentMasterId);
+            }
+            else
+            {
+                return base.GetGeneralPersonDetailsByEntityType(entityId, entityType);
+            }
+        }
         #endregion
     }
 

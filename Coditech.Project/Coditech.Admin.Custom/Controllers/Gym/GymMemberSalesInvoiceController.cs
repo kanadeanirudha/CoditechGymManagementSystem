@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Coditech.Admin.Controllers
 {
-	public class GymMemberSalesInvoiceController : BaseController
+    public class GymMemberSalesInvoiceController : BaseController
     {
         private readonly IGymSalesInvoiceAgent _gymSaleInvoiceAgent;
 

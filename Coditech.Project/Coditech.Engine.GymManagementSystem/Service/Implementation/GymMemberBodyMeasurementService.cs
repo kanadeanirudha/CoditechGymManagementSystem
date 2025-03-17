@@ -27,7 +27,7 @@ namespace Coditech.API.Service
             _serviceProvider = serviceProvider;
             _coditechLogging = coditechLogging;
             _gymBodyMeasurementTypeRepository = new CoditechRepository<GymBodyMeasurementType>(_serviceProvider.GetService<CoditechCustom_Entities>());
-            _generalMeasurementUnitMasterRepository = new CoditechRepository<GeneralMeasurementUnitMaster>(_serviceProvider.GetService<CoditechCustom_Entities>());
+            _generalMeasurementUnitMasterRepository = new CoditechRepository<GeneralMeasurementUnitMaster>(_serviceProvider.GetService<Coditech_Entities>());
             _gymMemberBodyMeasurementRepository = new CoditechRepository<GymMemberBodyMeasurement>(_serviceProvider.GetService<CoditechCustom_Entities>());
         }
 
@@ -36,19 +36,20 @@ namespace Coditech.API.Service
 
             GymMemberBodyMeasurementListModel listModel = new GymMemberBodyMeasurementListModel();
             listModel.GymMemberBodyMeasurementList = new List<GymMemberBodyMeasurementModel>();
-
-            listModel.GymMemberBodyMeasurementList = (from a in _gymBodyMeasurementTypeRepository.Table
-                                                      join b in _generalMeasurementUnitMasterRepository.Table
-                                                      on a.GeneralMeasurementUnitMasterId equals b.GeneralMeasurementUnitMasterId
-                                                      where a.IsActive
-                                                      select new GymMemberBodyMeasurementModel
-                                                      {
-                                                          GymBodyMeasurementTypeId = a.GymBodyMeasurementTypeId,
-                                                          BodyMeasurementType = a.BodyMeasurementType,
-                                                          MeasurementUnitShortCode = b.MeasurementUnitShortCode,
-                                                          MeasurementUnitDisplayName = b.MeasurementUnitDisplayName
-                                                      })?.ToList();
-
+            List< GeneralMeasurementUnitMaster> generalMeasurementUnitMasterList = _generalMeasurementUnitMasterRepository.Table.ToList();
+            List<GymBodyMeasurementType> gymBodyMeasurementTypeList = _gymBodyMeasurementTypeRepository.Table.Where(x=>x.IsActive).ToList();
+            foreach (GymBodyMeasurementType gymBodyMeasurementType in gymBodyMeasurementTypeList)
+            {
+                GymMemberBodyMeasurementModel gymMemberBodyMeasurementModel = new GymMemberBodyMeasurementModel()
+                {
+                    GymBodyMeasurementTypeId = gymBodyMeasurementType.GymBodyMeasurementTypeId,
+                    BodyMeasurementType = gymBodyMeasurementType.BodyMeasurementType,
+                    MeasurementUnitShortCode = generalMeasurementUnitMasterList.FirstOrDefault(x => x.GeneralMeasurementUnitMasterId == gymBodyMeasurementType.GeneralMeasurementUnitMasterId)?.MeasurementUnitShortCode,
+                    MeasurementUnitDisplayName = generalMeasurementUnitMasterList.FirstOrDefault(x => x.GeneralMeasurementUnitMasterId == gymBodyMeasurementType.GeneralMeasurementUnitMasterId)?.MeasurementUnitDisplayName
+                };
+                listModel.GymMemberBodyMeasurementList.Add(gymMemberBodyMeasurementModel);
+            }
+           
             foreach (GymMemberBodyMeasurementModel item in listModel?.GymMemberBodyMeasurementList)
             {
                 List<GymMemberBodyMeasurement> gymMemberBodyMeasurementValueList = _gymMemberBodyMeasurementRepository.Table.Where(x => x.GymMemberDetailId == gymMemberDetailId && x.GymBodyMeasurementTypeId == item.GymBodyMeasurementTypeId)?.OrderByDescending(y => y.BodyMeasurementDate)?.Take(pageSize)?.ToList();
