@@ -3,7 +3,6 @@
     ViewBag.Title = "Gym Sale Invoice";
     string controllerName = ViewContext.RouteData.Values["controller"].ToString();
     string actionName = ViewContext.RouteData.Values["action"].ToString();
-    string applicationLogoPath = CoditechAdminSettings.ApplicationLogoPath;
 }
 
 <!-- Page Content-->
@@ -34,10 +33,12 @@
 							margin-right: calc(-.5* var(--bs-gutter-x));
 							margin-left: calc(-.5* var(--bs-gutter-x));padding:0 1rem;">
                                 <div class="col-md-4 align-self-center" style="flex: 0 0 auto;width: 33.33333%;align-self: center !important; margin-bottom:1rem;">
-                                    <img src="@applicationLogoPath" alt="logo-small" class="logo-sm me-1" height="50">
+                                    @if (!string.IsNullOrEmpty(Model?.OrganisationCentreInvoicePrintingFormat?.LogoMediaPath))
+                                    {
+                                        <img src="@Model.OrganisationCentreInvoicePrintingFormat.LogoMediaPath" alt="logo-small" class="logo-sm me-1" height="50">
+                                    }
                                 </div>
-                                <div class="col-md-8" style="flex: 0 0 auto;width: 62.33333%;align-self: center !important;
-    margin-bottom: 1rem;">
+                                <div class="col-md-8" style="flex: 0 0 auto;width: 62.33333%;align-self: center !important;margin-bottom: 1rem;">
                                     <p class="mt-2 mb-0 font-24">@Model.OrganisationCentreInvoicePrintingFormat.PrintingLine1</p>
                                     <p class="mt-2 mb-0 text-muted">@Model.OrganisationCentreInvoicePrintingFormat.PrintingLine2</p>
                                     <p class="mt-2 mb-0 text-muted">@Model.OrganisationCentreInvoicePrintingFormat.PrintingLine3</p>
@@ -215,8 +216,10 @@
 
                                 <div class="col-lg-4 align-self-end" style="flex: 0 0 auto;width: 49.33%;align-self: flex-end !important;">
                                     <div class="float-end" style="float:right;">
-                                        @* <small>Account Manager</small> *@
-                                        <img src="../assets/images/signature.png" alt="" class="mt-2 mb-1" height="70" width="150">
+                                        @if (!string.IsNullOrEmpty(Model?.OrganisationCentreInvoicePrintingFormat?.SignatureMediaPath))
+                                        {
+                                            <img src="@Model.OrganisationCentreInvoicePrintingFormat.SignatureMediaPath" alt="" class="mt-2 mb-1" height="70" width="150">
+                                        }
                                         <p class="border-top">Account Manager</p>
                                     </div>
                                 </div>

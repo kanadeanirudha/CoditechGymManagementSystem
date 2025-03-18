@@ -24,6 +24,7 @@ namespace Coditech.API.Service
         private readonly ICoditechRepository<GymMembershipPlan> _gymMembershipPlanRepository;
         private readonly ICoditechRepository<OrganisationCentrePrintingFormat> _organisationCentrePrintingFormatRepository;
         private readonly ICoditechRepository<OrganisationCentreMaster> _organisationCentreMasterRepository;
+        private readonly ICoditechRepository<MediaDetail> _mediaDetailRepository;
         public GymSalesInvoiceService(ICoditechLogging coditechLogging, IServiceProvider serviceProvider) : base(serviceProvider)
         {
             _serviceProvider = serviceProvider;
@@ -34,6 +35,7 @@ namespace Coditech.API.Service
             _organisationCentreMasterRepository = new CoditechRepository<OrganisationCentreMaster>(_serviceProvider.GetService<Coditech_Entities>());
             _salesInvoiceMasterRepository = new CoditechRepository<SalesInvoiceMaster>(_serviceProvider.GetService<Coditech_Entities>());
             _salesInvoiceDetailsRepository = new CoditechRepository<SalesInvoiceDetails>(_serviceProvider.GetService<Coditech_Entities>());
+            _mediaDetailRepository = new CoditechRepository<MediaDetail>(_serviceProvider.GetService<Coditech_Entities>());
         }
 
         public virtual GymMemberSalesInvoiceListModel GymMemberServiceSalesInvoiceList(string SelectedCentreCode, DateTime? fromDate, DateTime? toDate, FilterCollection filters, NameValueCollection sorts, NameValueCollection expands, int pagingStart, int pagingLength)
@@ -134,6 +136,24 @@ namespace Coditech.API.Service
                 if (IsNotNull(organisationCentrePrintingFormat))
                 {
                     salesInvoicePrintModel.OrganisationCentreInvoicePrintingFormat = organisationCentrePrintingFormat.FromEntityToModel<OrganisationCentrePrintingFormatModel>();
+                    if (salesInvoicePrintModel.OrganisationCentreInvoicePrintingFormat.LogoMediaId > 0)
+                    {
+                        var mediaDetail = _mediaDetailRepository.Table.Where(x => x.MediaId == salesInvoicePrintModel.OrganisationCentreInvoicePrintingFormat.LogoMediaId).FirstOrDefault();
+                        if (mediaDetail != null)
+                        {
+                            salesInvoicePrintModel.OrganisationCentreInvoicePrintingFormat.LogoMediaPath = $"{GetMediaUrl()}{mediaDetail.Path}";
+                            salesInvoicePrintModel.OrganisationCentreInvoicePrintingFormat.LogoMediaFileName = mediaDetail.FileName;
+                        }
+                    }
+                    if (salesInvoicePrintModel.OrganisationCentreInvoicePrintingFormat.SignatureMediaId > 0)
+                    {
+                        var mediaDetail = _mediaDetailRepository.Table.Where(x => x.MediaId == salesInvoicePrintModel.OrganisationCentreInvoicePrintingFormat.SignatureMediaId).FirstOrDefault();
+                        if (mediaDetail != null)
+                        {
+                            salesInvoicePrintModel.OrganisationCentreInvoicePrintingFormat.SignatureMediaPath = $"{GetMediaUrl()}{mediaDetail.Path}";
+                            salesInvoicePrintModel.OrganisationCentreInvoicePrintingFormat.SignatureMediaFileName = mediaDetail.FileName;
+                        }
+                    }
                 }
                 salesInvoicePrintModel.OrganisationCentreModel = _organisationCentreMasterRepository.Table.FirstOrDefault(x => x.OrganisationCentreMasterId == organisationCentreMasterId)?.FromEntityToModel<OrganisationCentreModel>();
             }
