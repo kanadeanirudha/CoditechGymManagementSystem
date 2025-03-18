@@ -13,12 +13,14 @@ namespace Coditech.Admin.Controllers
     {
         private readonly IGymMemberDetailsAgent _gymMemberDetailsAgent;
         private readonly IGymMemberBodyMeasurementAgent _gymMemberBodyMeasurementAgent;
+        private readonly IUserAgent _userAgent;
         private const string createEditGymMember = "~/Views/Gym/GymMemberDetails/CreateEditGymMember.cshtml";
 
-        public GymMemberDetailsController(IGymMemberDetailsAgent gymMemberDetailsAgent, IGymMemberBodyMeasurementAgent gymMemberBodyMeasurementAgent)
+        public GymMemberDetailsController(IGymMemberDetailsAgent gymMemberDetailsAgent, IGymMemberBodyMeasurementAgent gymMemberBodyMeasurementAgent, IUserAgent userAgent)
         {
             _gymMemberDetailsAgent = gymMemberDetailsAgent;
             _gymMemberBodyMeasurementAgent = gymMemberBodyMeasurementAgent;
+            _userAgent = userAgent;
         }
 
         #region GymMemberDetails
@@ -153,8 +155,9 @@ namespace Coditech.Admin.Controllers
             SetNotificationMessage(GetErrorNotificationMessage(GeneralResources.DeleteErrorMessage));
             return RedirectToAction("List", new DataTableViewModel { SelectedCentreCode = selectedCentreCode });
         }
+        #endregion
 
-
+        #region GymMember Address
         [HttpGet]
         public virtual ActionResult CreateEditGymMemberAddress(int gymMemberDetailId, long personId)
         {
@@ -166,7 +169,19 @@ namespace Coditech.Admin.Controllers
             };
             return ActionView("~/Views/Gym/GymMemberDetails/CreateEditGymMemberAddress.cshtml", model);
         }
-        #endregion
+
+        [HttpPost]
+        public virtual ActionResult CreateEditGeneralPersonalAddress(GeneralPersonAddressViewModel generalPersonAddressViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                SetNotificationMessage(_userAgent.InsertUpdateGeneralPersonAddress(generalPersonAddressViewModel).HasError
+                ? GetErrorNotificationMessage(GeneralResources.UpdateErrorMessage)
+                : GetSuccessNotificationMessage(GeneralResources.UpdateMessage));
+            }
+            return RedirectToAction("CreateEditGymMemberAddress", "GymMemberDetails", new { gymMemberDetailId = generalPersonAddressViewModel.EntityId, personId = generalPersonAddressViewModel.PersonId });
+        }
+        #endregion 
 
         #region MemberFollowUpList
         public ActionResult MemberFollowUpList( DataTableViewModel dataTableModel)

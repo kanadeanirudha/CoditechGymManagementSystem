@@ -217,6 +217,7 @@ namespace Coditech.API.Common
         public static void RegisterCustomDI(this WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<IUserService, GymUserService>();
+            builder.Services.AddScoped<IGeneralPersonAttendanceDetailsService, GymGeneralPersonAttendanceDetailsService>();
         }
     }
 }
