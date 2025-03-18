@@ -130,13 +130,10 @@ namespace Coditech.API.Service
                 }
                 int organisationCentreMasterId = GetOrganisationCentreMasterIdByCentreCode(salesInvoicePrintModel.CentreCode);
                 OrganisationCentrePrintingFormat organisationCentrePrintingFormat = _organisationCentrePrintingFormatRepository.Table.FirstOrDefault(x => x.OrganisationCentreMasterId == organisationCentreMasterId);
-                salesInvoicePrintModel.OrganisationCentreInvoicePrintingFormat = new OrganisationCentreInvoicePrintingFormat();
+                salesInvoicePrintModel.OrganisationCentreInvoicePrintingFormat = new OrganisationCentrePrintingFormatModel();
                 if (IsNotNull(organisationCentrePrintingFormat))
                 {
-                    salesInvoicePrintModel.OrganisationCentreInvoicePrintingFormat.PrintingLine1 = organisationCentrePrintingFormat.PrintingLine1;
-                    salesInvoicePrintModel.OrganisationCentreInvoicePrintingFormat.PrintingLine2 = organisationCentrePrintingFormat.PrintingLine2;
-                    salesInvoicePrintModel.OrganisationCentreInvoicePrintingFormat.PrintingLine3 = organisationCentrePrintingFormat.PrintingLine3;
-                    salesInvoicePrintModel.OrganisationCentreInvoicePrintingFormat.PrintingLine4 = organisationCentrePrintingFormat.PrintingLine4;
+                    salesInvoicePrintModel.OrganisationCentreInvoicePrintingFormat = organisationCentrePrintingFormat.FromEntityToModel<OrganisationCentrePrintingFormatModel>();
                 }
                 salesInvoicePrintModel.OrganisationCentreModel = _organisationCentreMasterRepository.Table.FirstOrDefault(x => x.OrganisationCentreMasterId == organisationCentreMasterId)?.FromEntityToModel<OrganisationCentreModel>();
             }
