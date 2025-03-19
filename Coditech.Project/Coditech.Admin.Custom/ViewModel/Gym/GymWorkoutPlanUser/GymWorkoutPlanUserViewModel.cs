@@ -14,5 +14,6 @@ namespace Coditech.Admin.ViewModel
         public string LastName { get; set; }
         public string MobileNumber { get; set; }
         public string WorkoutPlanName { get; set; }
+        public bool IsGymWorkoutPlanActive { get; set; }
     }
 }

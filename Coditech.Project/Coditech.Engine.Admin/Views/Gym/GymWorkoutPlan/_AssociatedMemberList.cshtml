@@ -42,9 +42,13 @@
                                 {
                                     <a data-bs-toggle="modal" data-bs-target="#@addFollowUpModel.ModelPopUpId" href="void javascritp(0)" onclick="GymWorkoutPlan.GetAssociateUnAssociateWorkoutPlanUser('@addFollowUpModel.ModalContentId','@item.GymWorkoutPlanUserId','@Model.GymWorkoutPlanId','@item.WorkoutPlanName','@item.FirstName','@item.LastName','@item.GymMemberDetailId')" title="UnAssociate Workout Plan From User" class="btn btn-sm btn-soft-danger btn-circle"><i class="fas fa-redo"></i></a>
                                 }
-                                else
+                                else if (item.IsGymWorkoutPlanActive)
                                 {
                                     <a data-bs-toggle="modal" data-bs-target="#@addFollowUpModel.ModelPopUpId" href="void javascritp(0)" onclick="GymWorkoutPlan.GetAssociateUnAssociateWorkoutPlanUser('@addFollowUpModel.ModalContentId','@item.GymWorkoutPlanUserId','@Model.GymWorkoutPlanId','@item.WorkoutPlanName','@item.FirstName','@item.LastName','@item.GymMemberDetailId')" title="Associate Workout Plan To User" class="btn btn-sm btn-soft-success btn-circle"><i class="fas fa-check"></i></a>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-soft-info">Plan Is Not Active</span>
                                 }
                             </td>
                         </tr>
