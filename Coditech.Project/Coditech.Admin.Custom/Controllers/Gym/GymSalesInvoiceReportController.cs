@@ -1,9 +1,11 @@
-﻿using Coditech.Admin.Agents;
+﻿using AspNetCore.Reporting;
+using Coditech.Admin.Agents;
 using Coditech.Admin.ViewModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Data;
+using System.Text;
 
 namespace Coditech.Admin.Controllers
 {
@@ -70,16 +72,17 @@ namespace Coditech.Admin.Controllers
 
                     string reportName = "SalesInvoice";
 
-                    Stream stream = GetReport(this.Environment, "Gym", "GymSalesInvoice", dataTable, "DataSet1", reportParameters);
+                    Stream stream = null;
 
                     if (model.ReportType == "xls")
                     {
+                        GetReport(this.Environment, "Gym", "GymSalesInvoice", dataTable, "DataSet1", reportParameters, RenderType.Excel);
                         return File(stream, "application/xls", $"{reportName}.xls");
                     }
                     else
                     {
+                        GetReport(this.Environment, "Gym", "GymSalesInvoice", dataTable, "DataSet1", reportParameters, RenderType.Pdf);
                         return File(stream, "application/pdf", $"{reportName}.pdf");
-                        //return File(stream, "application/xls");
                     }
                 }
                 else
@@ -90,6 +93,14 @@ namespace Coditech.Admin.Controllers
             return View("~/Views/Gym/Reports/SaleInvoiceReport.cshtml", model);
         }
 
-
+        public Stream GetReport(IWebHostEnvironment _environment, string reportFolder, string rdlcReportName, DataTable dataTable, string dataSet, Dictionary<string, string> reportParameters, RenderType renderType)
+        {
+            string findString = "";
+            int pageIndex = 1;
+            LocalReport localReport = new LocalReport($"{_environment.ContentRootPath}\\Reports\\{reportFolder}\\{rdlcReportName}.rdlc");
+            localReport.AddDataSource(dataSet, dataTable);
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            return new MemoryStream(localReport.Execute(renderType, pageIndex, reportParameters, findString).MainStream);
+        }
     }
 }
