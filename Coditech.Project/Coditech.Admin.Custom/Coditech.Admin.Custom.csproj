@@ -6,7 +6,10 @@
 		<Nullable>disable</Nullable>
 	</PropertyGroup>
 
-
+	<ItemGroup>
+		<PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<Reference Include="Coditech.Admin.Core">
 			<HintPath>..\SharedLibraries\Coditech.Admin.Core.dll</HintPath>
