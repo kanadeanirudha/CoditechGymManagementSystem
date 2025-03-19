@@ -46,16 +46,17 @@
                             <tr class="set-fields">
 
                                 <td>
-                                    <input type="text" class="form-control" id="Weight_" placeholder="Weight in kgs" required  onkeypress="return CoditechCommon.ValidDecimalNumeric()">
-                                    @* @Html.ValidationMessageFor(x => x.GymWorkoutPlanSetList[0].Weight) *@
+                                    <input type="text" class="form-control weight-input" id="Weight_" placeholder="Weight in kgs" required onkeypress="return CoditechCommon.ValidDecimalNumeric()">
+                                    <span class="error-message text-danger" style="display: none;">The Weight field is required.</span>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" id="Repetitions_" placeholder="No. of Repetitions" required onkeypress="return CoditechCommon.ValidNumeric()">
-                                    @*  @Html.ValidationMessageFor(x => x.GymWorkoutPlanSetList[0].Repetitions) *@
+                                    <input type="text" class="form-control repetitions-input" id="Repetitions_" placeholder="No. of Repetitions" required onkeypress="return CoditechCommon.ValidNumeric()">
+                                    <span class="error-message text-danger" style="display: none;">The Repetitions field is required.</span>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" id="Duration_" placeholder="Duration in sec" required onkeypress="return CoditechCommon.ValidNumeric()">
-                                    @* @Html.ValidationMessageFor(x => x.GymWorkoutPlanSetList[0].Duration) *@
+                                    <input type="text" class="form-control duration-input" id="Duration_" placeholder="Duration in sec" required onkeypress="return CoditechCommon.ValidNumeric()">
+                                    <span class="error-message text-danger" style="display: none;">The Duration field is required.</span>
+
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-sm btn-soft-danger deleteSetButton" style="display:none;">
@@ -89,30 +90,69 @@
 
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('.set-fields:first .deleteSetButton').hide();
+$(document).ready(function () {
+    $('.set-fields:first .deleteSetButton').hide();
 
-        $('#addSetButton').click(function () {
-            var newSetIndex = $('#setsContainer tr').length;
+    $('#addSetButton').click(function () {
+        var newSetIndex = $('#setsContainer tr').length;
 
-            var newSet = $('.set-fields:first').clone();
-            newSet.find('input').val('');
+        var newSet = $('.set-fields:first').clone();
+        newSet.find('input').val('');
+        newSet.find(".error-message").hide();
 
-
-            newSet.find('input[type="hidden"]').each(function (i) {
-                $(this).attr('id', 'GymWorkoutSet_' + newSetIndex);
-                $(this).attr('name', 'GymWorkoutPlanSetList[' + newSetIndex + '].GymWorkoutSetId');
-            });
-
-
-            newSet.find('.deleteSetButton').show();
-            $('#setsContainer').append(newSet);
+        newSet.find('input[type="hidden"]').each(function (i) {
+            $(this).attr('id', 'GymWorkoutSet_' + newSetIndex);
+            $(this).attr('name', 'GymWorkoutPlanSetList[' + newSetIndex + '].GymWorkoutSetId');
         });
 
-        $(document).on('click', '.deleteSetButton', function () {
-            $(this).closest('.set-fields').remove();
+        newSet.find('.deleteSetButton').show();
+        $('#setsContainer').append(newSet);
+
+        newSet.find(".form-control").on("blur", function () {
+            var inputValue = $(this).val().trim();
+            if (inputValue === "") {
+                $(this).next(".error-message").show();
+            } else {
+                $(this).next(".error-message").hide();
+            }
+        });
+
+        newSet.find(".form-control").on("input", function () {
+            $(this).next(".error-message").hide();
         });
     });
+
+    $(document).on('click', '.deleteSetButton', function () {
+        $(this).closest('.set-fields').remove();
+    });
+
+    $(".form-control").on("blur", function () {
+        var inputValue = $(this).val().trim();
+        if (inputValue === "") {
+            $(this).next(".error-message").show();
+        } else {
+            $(this).next(".error-message").hide();
+        }
+    });
+
+    $(".form-control").on("input", function () {
+        $(this).next(".error-message").hide();
+    });
+
+    $("#frmWorkoutPlanDetails").on("submit", function (e) {
+        var isValid = true;
+
+        $(".form-control").each(function () {
+            if ($(this).val().trim() === "") {
+                $(this).next(".error-message").show();
+                isValid = false;
+            }
+        });
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+});
 </script>
 
 
