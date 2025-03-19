@@ -76,12 +76,12 @@ namespace Coditech.Admin.Controllers
 
                     if (model.ReportType == "xls")
                     {
-                        GetReport(this.Environment, "Gym", "GymSalesInvoice", dataTable, "DataSet1", reportParameters, RenderType.Excel);
+                        stream = GetReport(this.Environment, "Gym", "GymSalesInvoice", dataTable, "DataSet1", reportParameters, RenderType.Excel);
                         return File(stream, "application/xls", $"{reportName}.xls");
                     }
                     else
                     {
-                        GetReport(this.Environment, "Gym", "GymSalesInvoice", dataTable, "DataSet1", reportParameters, RenderType.Pdf);
+                        stream = GetReport(this.Environment, "Gym", "GymSalesInvoice", dataTable, "DataSet1", reportParameters, RenderType.Pdf);
                         return File(stream, "application/pdf", $"{reportName}.pdf");
                     }
                 }
