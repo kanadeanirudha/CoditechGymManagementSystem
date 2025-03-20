@@ -4,7 +4,7 @@ namespace Coditech.Common.API.Model
 {
     public class GymWorkoutPlanUserModel : BaseModel
     {
-        public long GymWorkoutPlanUserId { get; set; }         
+        public long GymWorkoutPlanUserId { get; set; }
         public int GymMemberDetailId { get; set; }
         public long GymWorkoutPlanId { get; set; }
         public bool IsAssociated { get; set; }
@@ -14,5 +14,6 @@ namespace Coditech.Common.API.Model
         public string MobileNumber { get; set; }
         public string ImagePath { get; set; }
         public string WorkoutPlanName { get; set; }
+        public bool IsGymWorkoutPlanActive { get; set; }
     }
 }
