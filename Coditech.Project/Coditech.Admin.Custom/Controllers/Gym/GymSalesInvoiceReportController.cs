@@ -92,15 +92,5 @@ namespace Coditech.Admin.Controllers
             }
             return View("~/Views/Gym/Reports/SaleInvoiceReport.cshtml", model);
         }
-
-        public Stream GetReport(IWebHostEnvironment _environment, string reportFolder, string rdlcReportName, DataTable dataTable, string dataSet, Dictionary<string, string> reportParameters, RenderType renderType)
-        {
-            string findString = "";
-            int pageIndex = 1;
-            LocalReport localReport = new LocalReport($"{_environment.ContentRootPath}\\Reports\\{reportFolder}\\{rdlcReportName}.rdlc");
-            localReport.AddDataSource(dataSet, dataTable);
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            return new MemoryStream(localReport.Execute(renderType, pageIndex, reportParameters, findString).MainStream);
-        }
     }
 }
