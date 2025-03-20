@@ -37,6 +37,7 @@
     },
 
     SaveData: function () {
+        $("#saveButton").prop("disabled", true); 
         var data = [];
 
         $('#makeEditable tbody tr.set-fields').each(function () {
@@ -54,6 +55,29 @@
         $("#GymWorkoutPlanData").val(jsonData);
         console.log('JSON data:', jsonData);
 
-        $("#frmWorkoutPlanDetails").submit();
+        $.ajax({
+            type: "POST",
+            url: "/GymWorkoutPlan/AddWorkoutPlanDetails",
+            data: $("#frmWorkoutPlanDetails").serialize(),
+            success: function (response) {
+                if (response.success) {
+                    let url = window.location.origin + window.location.pathname + '?gymWorkoutPlanId=' + response.gymWorkoutPlanId;
+                    window.location.href = url;
+
+                } else {
+                    CoditechNotification.DisplayNotificationMessage(response.message, "error");
+                }
+            },
+            error: function () {
+                CoditechNotification.DisplayNotificationMessage("Failed to save workout details.", "error");
+            },
+            complete: function () {
+                $("#saveButton").prop("disabled", false); 
+            }
+        });
+        $("#frmWorkoutPlanDetails").on("submit", function (e) {
+            e.preventDefault(); 
+            SaveData();
+        });
     }
 };

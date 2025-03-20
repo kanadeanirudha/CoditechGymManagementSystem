@@ -138,10 +138,11 @@ namespace Coditech.Admin.Controllers
                 gymWorkoutPlanDetailsViewModel = _gymWorkoutPlanSetAgent.AddWorkoutPlanDetails(gymWorkoutPlanDetailsViewModel);
                 if (!gymWorkoutPlanDetailsViewModel.HasError)
                 {
-                    SetNotificationMessage(GetSuccessNotificationMessage(GeneralResources.RecordAddedSuccessMessage));
+                    SetNotificationMessage(GetSuccessNotificationMessage("Workout Plan Saved Successfully."));
+                    return Json(new { success = true, gymWorkoutPlanId = gymWorkoutPlanDetailsViewModel.GymWorkoutPlanId });
                 }
             }
-            SetNotificationMessage(GetErrorNotificationMessage(gymWorkoutPlanDetailsViewModel.ErrorMessage));
+            SetNotificationMessage(GetErrorNotificationMessage("Failed to Save Workout Plan."));
             return RedirectToAction("GetWorkoutPlanDetails", new { gymWorkoutPlanId = gymWorkoutPlanDetailsViewModel.GymWorkoutPlanId });
         }
 
