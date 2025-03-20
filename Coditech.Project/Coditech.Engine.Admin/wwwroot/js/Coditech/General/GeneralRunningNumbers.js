@@ -6,15 +6,15 @@
     },
 
     GetFinancialYearListByCentreCode: function () {
-        var selectedCentreCode = $("#SelectedCentreCode").val();
-        if (selectedCentreCode !== "") {
+        var centreCode = $("#CentreCode").val();
+        if (centreCode !== "") {
             CoditechCommon.ShowLodder();
             $.ajax({
                 cache: false,
                 type: "GET",
                 dataType: "html",
                 url: "/GeneralRunningNumbers/GetFinancialYearListByCentreCode",
-                data: { "selectedCentreCode": selectedCentreCode },
+                data: { "centreCode": centreCode },
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     $("#GeneralFinancialYearId").html(data);
