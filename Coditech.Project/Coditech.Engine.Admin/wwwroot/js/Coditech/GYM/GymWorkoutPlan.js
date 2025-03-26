@@ -65,7 +65,7 @@
                     window.location.href = url;
 
                 } else {
-                    CoditechNotification.DisplayNotificationMessage(response.message, "error");
+                    CoditechNotification.DisplayNotificationMessage("error");
                 }
             },
             error: function () {
