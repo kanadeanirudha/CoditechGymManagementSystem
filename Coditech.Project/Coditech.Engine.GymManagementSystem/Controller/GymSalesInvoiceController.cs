@@ -28,11 +28,11 @@ namespace Coditech.API.Controllers
         [Route("/GymSalesInvoice/GymMemberServiceSalesInvoiceList")]
         [Produces(typeof(GymMemberSalesInvoiceListResponse))]
         [TypeFilter(typeof(BindQueryFilter))]
-        public virtual IActionResult GymServiceSalesInvoiceList(string selectedCentreCode, DateTime? fromDate, DateTime? toDate, FilterCollection filter, ExpandCollection expand, SortCollection sort, int pageIndex, int pageSize)
+        public virtual IActionResult GymServiceSalesInvoiceList(int adminRoleMasterId, string selectedCentreCode, DateTime? fromDate, DateTime? toDate, FilterCollection filter, ExpandCollection expand, SortCollection sort, int pageIndex, int pageSize)
         {
             try
             {
-                GymMemberSalesInvoiceListModel list = _gymSalesInvoiceService.GymMemberServiceSalesInvoiceList(selectedCentreCode, fromDate, toDate, filter, sort.ToNameValueCollectionSort(), expand.ToNameValueCollectionExpands(), pageIndex, pageSize);
+                GymMemberSalesInvoiceListModel list = _gymSalesInvoiceService.GymMemberServiceSalesInvoiceList(adminRoleMasterId,selectedCentreCode, fromDate, toDate, filter, sort.ToNameValueCollectionSort(), expand.ToNameValueCollectionExpands(), pageIndex, pageSize);
                 string data = ApiHelper.ToJson(list);
                 return !string.IsNullOrEmpty(data) ? CreateOKResponse<GymMemberSalesInvoiceListResponse>(data) : CreateNoContentResponse();
             }

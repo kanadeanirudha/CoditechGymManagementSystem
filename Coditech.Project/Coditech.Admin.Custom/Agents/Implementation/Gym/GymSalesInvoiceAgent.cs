@@ -1,4 +1,5 @@
-﻿using Coditech.Admin.ViewModel;
+﻿using Coditech.Admin.Utilities;
+using Coditech.Admin.ViewModel;
 using Coditech.API.Client;
 using Coditech.Common.API.Model;
 using Coditech.Common.API.Model.Response;
@@ -27,6 +28,7 @@ namespace Coditech.Admin.Agents
         #region Public Methods
         public virtual GymMemberSalesInvoiceListViewModel GymMemberServiceSalesInvoiceList(DataTableViewModel dataTableModel)
         {
+            int adminRoleMasterId = SessionHelper.GetDataFromSession<UserModel>(AdminConstants.UserDataSession)?.SelectedAdminRoleMasterId ?? 0;
             FilterCollection filters = null;
             dataTableModel = dataTableModel ?? new DataTableViewModel();
             if (!string.IsNullOrEmpty(dataTableModel.SearchBy))
@@ -40,7 +42,7 @@ namespace Coditech.Admin.Agents
             dataTableModel.SelectedParameter2 = string.IsNullOrEmpty(dataTableModel.SelectedParameter2) ? Convert.ToDateTime(DateTime.Now).ToShortDateString() : dataTableModel.SelectedParameter2;
             SortCollection sortlist = SortingData(dataTableModel.SortByColumn = string.IsNullOrEmpty(dataTableModel.SortByColumn) ? "" : dataTableModel.SortByColumn, dataTableModel.SortBy);
            
-            GymMemberSalesInvoiceListResponse response = _gymSalesInvoiceClient.GymMemberServiceSalesInvoiceList(dataTableModel.SelectedCentreCode, Convert.ToDateTime(dataTableModel.SelectedParameter1), Convert.ToDateTime(dataTableModel.SelectedParameter2), null, filters, sortlist, dataTableModel.PageIndex, dataTableModel.PageSize);
+            GymMemberSalesInvoiceListResponse response = _gymSalesInvoiceClient.GymMemberServiceSalesInvoiceList(adminRoleMasterId,dataTableModel.SelectedCentreCode, Convert.ToDateTime(dataTableModel.SelectedParameter1), Convert.ToDateTime(dataTableModel.SelectedParameter2), null, filters, sortlist, dataTableModel.PageIndex, dataTableModel.PageSize);
             GymMemberSalesInvoiceListModel gymMemberSalesInvoiceList = new GymMemberSalesInvoiceListModel { GymMemberSalesInvoiceList = response?.GymMemberSalesInvoiceList };
             GymMemberSalesInvoiceListViewModel listViewModel = new GymMemberSalesInvoiceListViewModel();
             listViewModel.GymMemberSalesInvoiceList = gymMemberSalesInvoiceList?.GymMemberSalesInvoiceList?.ToViewModel<GymMemberSalesInvoiceViewModel>().ToList();
