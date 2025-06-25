@@ -530,13 +530,13 @@ namespace Coditech.API.Service
             short generalDepartmentMasterId = 0;
             if (entityType == UserTypeCustomEnum.GymMember.ToString())
             {
-                GymMemberDetails gymMemberDetails = new CoditechRepository<GymMemberDetails>(_serviceProvider.GetService<CoditechCustom_Entities>()).Table.Where(x => x.GymMemberDetailId == entityId)?.FirstOrDefault();
-                if (IsNotNull(gymMemberDetails))
+                GymMemberDetails dbtmTraineeDetails = new CoditechRepository<GymMemberDetails>(_serviceProvider.GetService<CoditechCustom_Entities>()).Table.FirstOrDefault(x => x.GymMemberDetailId == entityId);
+                if (IsNotNull(dbtmTraineeDetails))
                 {
-                    personId = gymMemberDetails.PersonId;
-                    centreCode = gymMemberDetails.CentreCode;
+                    personId = dbtmTraineeDetails.PersonId;
+                    centreCode = dbtmTraineeDetails.CentreCode;
                 }
-                return base.BindGeneralPersonInformation(personId, centreCode, personCode, generalDepartmentMasterId);
+                return base.BindGeneralPersonInformation(personId, centreCode, personCode, generalDepartmentMasterId, dbtmTraineeDetails.IsActive);
             }
             else
             {

@@ -3,7 +3,7 @@
     ViewBag.Title = Model.GeneralFinancialYearId > 0 ? "Update FinancialYear" : "Add FinancialYear";
     string controllerName = ViewContext.RouteData.Values["controller"].ToString();
     string actionName = ViewContext.RouteData.Values["action"].ToString();
-    DropdownViewModel centreDropdown = new DropdownViewModel() { DropdownType = DropdownTypeEnum.AccessibleCentre.ToString(), DropdownName = "CentreCode", DropdownSelectedValue = Model.CentreCode };
+    DropdownViewModel centreDropdown = new DropdownViewModel() { DropdownType = DropdownTypeEnum.AccessibleCentre.ToString(), DropdownName = "CentreCode", DropdownSelectedValue = Model.CentreCode, IsDisabled = Model.GeneralFinancialYearId > 0 };
 
 }
 <!-- Page Content-->
@@ -30,6 +30,10 @@
                         @using (Html.BeginForm(actionName, controllerName, FormMethod.Post))
                         {
                             @Html.HiddenFor(m => m.GeneralFinancialYearId)
+                            if (Model.GeneralFinancialYearId > 0)
+                            {
+                                @Html.HiddenFor(m => m.CentreCode)
+                            }
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="mb-3">
@@ -70,7 +74,7 @@
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-success">@AdminResources.LabelSave</button>
-                            <a href="../@controllerName/List" class="btn btn-secondary"><i class="ft-x"></i>@AdminResources.LabelCancel</a>
+                            <a href="../@controllerName/Cancel?SelectedCentreCode=@Model.CentreCode" class="btn btn-secondary"><i class="ft-x"></i>@AdminResources.LabelCancel</a>
                         }
                     </div>
                 </div>
@@ -80,13 +84,13 @@
 </div>
 @section scripts {
     <script type="text/javascript">
-                $(function () {
+        $(function () {
             function restrictDateRange(datepicker, minDate, maxDate) {
                 datepicker.datepicker("option", "minDate", minDate);
                 datepicker.datepicker("option", "maxDate", maxDate);
             }
 
-                    function updateConstraintsFromFromDate() {
+            function updateConstraintsFromFromDate() {
                 const fromDate = $("#FromDate").datepicker("getDate");
                 if (fromDate) {
                     const minToDate = new Date(fromDate.getFullYear(), 0, 1);
