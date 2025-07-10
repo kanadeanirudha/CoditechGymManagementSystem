@@ -111,12 +111,28 @@ namespace Coditech.API.Service
             }
         }
 
-        protected virtual string ReplaceGymMemberEmailTemplate(GeneralPersonModel generalPersonModel, string emailTemplate)
+        protected string ReplaceGymMemberEmailTemplate(GeneralPersonModel generalPersonModel, string emailTemplate)
         {
             string messageText = emailTemplate;
             messageText = ReplaceTokenWithMessageText(EmailTemplateTokenConstant.FirstName, generalPersonModel.FirstName, messageText);
             messageText = ReplaceTokenWithMessageText(EmailTemplateTokenConstant.LastName, generalPersonModel.LastName, messageText);
             return ReplaceEmailTemplateFooter(generalPersonModel.SelectedCentreCode, messageText);
+        }
+        protected override void UpdateIsActiveFlagForUserType(GeneralPersonModel generalPersonModel)
+        {
+            if (generalPersonModel.UserType.Equals(UserTypeCustomEnum.GymMember.ToString(), StringComparison.InvariantCultureIgnoreCase))
+            {
+                GymMemberDetails gymMemberDetails = _gymMemberDetailsRepository.Table.Where(x => x.GymMemberDetailId == generalPersonModel.EntityId)?.FirstOrDefault();
+
+                if (gymMemberDetails != null)
+                {
+                    gymMemberDetails.IsActive = generalPersonModel.IsActive;
+                    _gymMemberDetailsRepository.Update(gymMemberDetails);
+                }
+            }
+            else {
+                base.UpdateIsActiveFlagForUserType(generalPersonModel);
+            }
         }
     }
 }
