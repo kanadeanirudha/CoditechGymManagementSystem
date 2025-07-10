@@ -44,7 +44,7 @@ namespace Coditech.API.Service
             }
         }
 
-        protected override void InsertPersonDetails(GeneralPersonModel generalPersonModel, List<GeneralSystemGlobleSettingModel> settingMasterList)
+        protected override void InsertPersonDetails(GeneralPersonModel generalPersonModel, List<GeneralSystemGlobleSettingModel> settingMasterList, string customData)
         {
             if (generalPersonModel.UserType.Equals(UserTypeCustomEnum.GymMember.ToString(), StringComparison.InvariantCultureIgnoreCase))
             {

@@ -4,6 +4,14 @@
     string applicationLogoPath = CoditechAdminSettings.ApplicationLogoPath;
     string applicationLayoutBackground = CoditechAdminSettings.ApplicationLayoutBackground;
     string applicationTitle = CoditechAdminSettings.ApplicationTitle;
+    if (CookieHelper.IsCookieExists(AdminConstants.LogoCookieNameValue))
+    {
+        string logoMediaPath = CookieHelper.GetCookieValue<string>(AdminConstants.LogoCookieNameValue);
+        if (!string.IsNullOrWhiteSpace(logoMediaPath))
+        {
+            applicationLogoPath = logoMediaPath;
+        }
+    }
     string formSizeClass = "col-lg-4";
     if (!string.IsNullOrEmpty(Convert.ToString(TempData["FormSizeClass"])))
     {
