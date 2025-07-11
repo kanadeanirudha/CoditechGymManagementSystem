@@ -108,6 +108,7 @@ namespace Coditech.Admin.Agents
                 if (IsNotNull(gymMemberDetailsResponse))
                 {
                     gymCreateEditMemberViewModel.SelectedCentreCode = gymMemberDetailsResponse.GymMemberDetailsModel.CentreCode;
+                    gymCreateEditMemberViewModel.IsActive = gymMemberDetailsResponse.GymMemberDetailsModel.IsActive;
                 }
                 gymCreateEditMemberViewModel.GymMemberDetailId = gymMemberDetailId;
                 gymCreateEditMemberViewModel.PersonId = personId;

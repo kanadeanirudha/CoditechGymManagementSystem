@@ -46,25 +46,11 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="mb-3">
-                                        @Html.LabelFor(x => x.IsActive, new { @class = "form-label" })
-                                        <div class="form-check">
-                                            @Html.CheckBoxFor(x => x.IsActive, new { @class = "form-check-input" })
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="mb-3">
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4">
-                                    <div class="mb-3">
                                         @Html.LabelFor(x => x.PANCardNumber, new { @class = "form-label" })
                                         @Html.TextBoxFor(x => x.PANCardNumber, new { @class = "form-control" })
                                         @Html.ValidationMessageFor(x => x.PANCardNumber)
                                     </div>
                                 </div>
-
                                 <div class="col-lg-4">
                                     <div class="mb-3">
                                         @Html.LabelFor(x => x.UANNumber, new { @class = "form-label" })
@@ -81,8 +67,8 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="mb-3">
-                                        @Html.LabelFor(x => x.AdharCardNumber, new { @class = "form-label"})
-                                        @Html.TextBoxFor(x => x.AdharCardNumber, new { @class = "form-control",@onkeypress="return CoditechCommom"})
+                                        @Html.LabelFor(x => x.AdharCardNumber, new { @class = "form-label" })
+                                        @Html.TextBoxFor(x => x.AdharCardNumber, new { @class = "form-control", @onkeypress = "return CoditechCommom" })
                                         @Html.ValidationMessageFor(x => x.AdharCardNumber)
                                     </div>
                                 </div>
@@ -115,9 +101,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
                             </div>
-
                             <button type="submit" class="btn btn-success">@AdminResources.LabelSave</button>
                             <a href="../@controllerName/List?SelectedCentreCode=@Model.CentreCode&SelectedDepartmentId=@Model.GeneralDepartmentMasterId" class="btn btn-secondary"><i class="ft-x"></i>@AdminResources.LabelCancel</a>
                         }

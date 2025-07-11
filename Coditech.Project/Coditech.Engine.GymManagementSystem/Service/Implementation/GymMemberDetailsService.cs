@@ -86,6 +86,7 @@ namespace Coditech.API.Service
                 {
                     gymMemberDetailsModel.FirstName = generalPersonModel.FirstName;
                     gymMemberDetailsModel.LastName = generalPersonModel.LastName;
+                    gymMemberDetailsModel.IsActive = gymMemberDetails.IsActive;
                 }
             }
             return gymMemberDetailsModel;
