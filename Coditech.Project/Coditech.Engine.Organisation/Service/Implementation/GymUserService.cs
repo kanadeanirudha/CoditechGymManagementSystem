@@ -86,14 +86,15 @@ namespace Coditech.API.Service
                 CentreCode = generalPersonModel.SelectedCentreCode,
                 PersonId = generalPersonModel.PersonId,
                 PersonCode = generalPersonModel.PersonCode,
-                UserType = generalPersonModel.UserType
+                UserType = generalPersonModel.UserType,
+                IsActive = true,
             };
             gymMemberDetails = _gymMemberDetailsRepository.Insert(gymMemberDetails);
 
             //Check Is Gym Member need to Login
             if (gymMemberDetails?.GymMemberDetailId > 0 && settingMasterList?.FirstOrDefault(x => x.FeatureName.Equals(GeneralSystemGlobleSettingCustomEnum.IsGymMemberLogin.ToString(), StringComparison.InvariantCultureIgnoreCase)).FeatureValue == "1")
             {
-                InsertUserMasterDetails(generalPersonModel, gymMemberDetails.GymMemberDetailId, false);
+                InsertUserMasterDetails(generalPersonModel, gymMemberDetails.GymMemberDetailId, generalPersonModel.IsActive);
                 try
                 {
                     GeneralEmailTemplateModel emailTemplateModel = GetEmailTemplateByCode(generalPersonModel.SelectedCentreCode, EmailTemplateCodeCustomEnum.GymMemberRegistration.ToString());
