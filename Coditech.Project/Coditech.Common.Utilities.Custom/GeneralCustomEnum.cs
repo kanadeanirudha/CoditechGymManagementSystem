@@ -24,7 +24,8 @@
     public enum EmailTemplateCodeCustomEnum
     {
         AssociateGymMembershipPlan,
-        GymMemberRegistration
+        GymMemberRegistration,
+        SendBirthdayAndAnniversaryMessage
     }
 
     public enum LogComponentCustomEnum
