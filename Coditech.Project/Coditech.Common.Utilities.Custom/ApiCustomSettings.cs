@@ -11,5 +11,13 @@ namespace Coditech.Common.API
         {
             settings = settingSource;
         }
+        public static byte GymMemberPlanExpiration
+        {
+            get
+            {
+                return Convert.ToByte(settings["GymMemberPlanExpiration"]);
+
+            }
+        }
     }
 }
