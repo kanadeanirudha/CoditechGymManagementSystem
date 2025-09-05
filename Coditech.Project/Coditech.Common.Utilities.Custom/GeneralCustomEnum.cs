@@ -25,7 +25,8 @@
     {
         AssociateGymMembershipPlan,
         GymMemberRegistration,
-        SendBirthdayAndAnniversaryMessage,
+        BirthdayMessage,
+        AnniversaryMessage,
         GymMembershipPlanExpireMessage
     }
 

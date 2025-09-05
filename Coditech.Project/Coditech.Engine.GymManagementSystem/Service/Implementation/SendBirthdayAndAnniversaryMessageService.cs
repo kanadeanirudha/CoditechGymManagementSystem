@@ -4,27 +4,34 @@ using Coditech.Common.Helper.Utilities;
 using Coditech.Common.Logger;
 using Coditech.Common.Service;
 using System.Data;
+using System.Diagnostics;
+using static Coditech.Common.Helper.HelperUtility;
 namespace Coditech.API.Service
 {
     public class SendBirthdayAndAnniversaryMessageService : BaseService, ISendBirthdayAndAnniversaryMessageService
     {
         protected readonly IServiceProvider _serviceProvider;
         protected readonly ICoditechLogging _coditechLogging;
+        protected readonly ICoditechEmail _coditechEmail;
+        protected readonly ICoditechSMS _coditechSMS;
+        protected readonly ICoditechWhatsApp _coditechWhatsApp;
         private readonly ICoditechRepository<GeneralPerson> _generalPersonRepository;
         private readonly ICoditechRepository<EmployeeMaster> _employeeMasterRepository;
 
-        public SendBirthdayAndAnniversaryMessageService(ICoditechLogging coditechLogging, IServiceProvider serviceProvider, ICoditechEmail coditechEmail) : base(serviceProvider)
+        public SendBirthdayAndAnniversaryMessageService(ICoditechLogging coditechLogging, IServiceProvider serviceProvider, ICoditechEmail coditechEmail, ICoditechSMS coditechSMS, ICoditechWhatsApp coditechWhatsApp) : base(serviceProvider)
         {
             _serviceProvider = serviceProvider;
             _coditechLogging = coditechLogging;
+            _coditechEmail = coditechEmail;
+            _coditechSMS = coditechSMS;
+            _coditechWhatsApp = coditechWhatsApp;
             _generalPersonRepository = new CoditechRepository<GeneralPerson>(_serviceProvider.GetService<Coditech_Entities>());
             _employeeMasterRepository = new CoditechRepository<EmployeeMaster>(_serviceProvider.GetService<Coditech_Entities>());
 
         }
         public virtual bool SendBirthdayAndAnniversaryMessage()
         {
-            //// Test ke liye fixed date
-            var today = new DateTime(2003, 1, 1);
+            DateTime today = DateTime.Today;
 
             var result = (from gp in _generalPersonRepository.Table
                           join em in _employeeMasterRepository.Table
@@ -45,11 +52,13 @@ namespace Coditech.API.Service
                               gp.DateOfBirth,
                               gp.AnniversaryDate,
                               gp.EmailId,
+                              gp.MobileNumber,
+                              gp.CallingCode,
                               em.CentreCode
                           }).ToList();
 
             if (!result.Any())
-                return false; 
+                return false;
 
             var groupedByCentre = result.GroupBy(x => x.CentreCode);
 
@@ -58,46 +67,91 @@ namespace Coditech.API.Service
                 var centreCode = centreGroup.Key;
                 var centreName = base.GetOrganisationCentreNameByCentreCode(centreCode);
 
-                string templateCode = EmailTemplateCodeCustomEnum.SendBirthdayAndAnniversaryMessage.ToString();
-                var emailTemplate = GetEmailTemplateByCode(centreCode, templateCode);
-
-                if (emailTemplate == null || string.IsNullOrWhiteSpace(emailTemplate.EmailTemplate))
-                    throw new CoditechException(ErrorCodes.NullModel, $"Email template '{templateCode}' not found for centre '{centreName}'.");
-
-                string subject = ReplaceTokenWithMessageText(EmailTemplateTokenConstant.CentreName, centreName, emailTemplate.Subject);
-
                 foreach (var person in centreGroup)
                 {
-                    string message = string.Empty;
+                    string templateCode = string.Empty;
 
+                    // -------- Decide Template ----------
                     if (person.DateOfBirth.HasValue &&
                         person.DateOfBirth.Value.Month == today.Month &&
                         person.DateOfBirth.Value.Day == today.Day)
                     {
-                        message = $"🎉 Happy Birthday!";
+                        templateCode = EmailTemplateCodeCustomEnum.BirthdayMessage.ToString();
                     }
                     else if (person.AnniversaryDate.HasValue &&
                              person.AnniversaryDate.Value.Month == today.Month &&
                              person.AnniversaryDate.Value.Day == today.Day)
                     {
-                        int years = today.Year - person.AnniversaryDate.Value.Year;
-                        message = $"💐 Happy {years} Year Anniversary!";
+                        templateCode = EmailTemplateCodeCustomEnum.AnniversaryMessage.ToString();
                     }
 
-                    string messageText = emailTemplate.EmailTemplate;
-                    messageText = ReplaceTokenWithMessageText(EmailTemplateTokenConstant.FirstName, person.FirstName, messageText);
-                    messageText = ReplaceTokenWithMessageText(EmailTemplateTokenConstant.LastName, person.LastName, messageText);
-                    messageText = ReplaceTokenWithMessageText(EmailTemplateTokenCustomConstant.BirthdayAndAnniversaryMessage, message, messageText);
-                    messageText = ReplaceTokenWithMessageText(EmailTemplateTokenConstant.CentreName, centreName, messageText);
+                    // --- Get Templates ---
+                    var emailTemplate = GetEmailTemplateByCode(centreCode, templateCode);
+                    var smsWaTemplate = GetSMSTemplateByCode(centreCode, templateCode); // same template for SMS + WhatsApp
 
-                    _coditechEmail.SendEmail(centreCode, person.EmailId, "", subject, messageText, true);
+                    if (string.IsNullOrWhiteSpace(emailTemplate?.EmailTemplate))
+                        throw new CoditechException(ErrorCodes.NullModel, $"Email template '{templateCode}' not found for centre '{centreName}'.");
+
+                    string subject = ReplaceTokenWithMessageText(EmailTemplateTokenConstant.CentreName, centreName, emailTemplate.Subject);
+
+                    // --------- Email ---------
+                    if (!string.IsNullOrEmpty(person.EmailId))
+                    {
+                        try
+                        {
+                            string emailMessage = emailTemplate.EmailTemplate;
+                            emailMessage = ReplaceTokenWithMessageText(EmailTemplateTokenConstant.FirstName, person.FirstName, emailMessage);
+                            emailMessage = ReplaceTokenWithMessageText(EmailTemplateTokenConstant.LastName, person.LastName, emailMessage);
+                            emailMessage = ReplaceTokenWithMessageText(EmailTemplateTokenConstant.CentreName, centreName, emailMessage);
+
+                            _coditechEmail.SendEmail(centreCode, person.EmailId, "", subject, emailMessage, true);
+                        }
+                        catch (Exception ex)
+                        {
+                            _coditechLogging.LogMessage($"Email sending failed: {ex.Message}", CoditechLoggingEnum.Components.EmailService.ToString(), TraceLevel.Error);
+                        }
+                    }
+
+                    // --------- SMS ---------
+                    if (!string.IsNullOrEmpty(person.MobileNumber) && IsNotNull(smsWaTemplate))
+                    {
+                        try
+                        {
+                            string smsMessage = smsWaTemplate.EmailTemplate;
+                            smsMessage = ReplaceTokenWithMessageText(EmailTemplateTokenConstant.FirstName, person.FirstName, smsMessage);
+                            smsMessage = ReplaceTokenWithMessageText(EmailTemplateTokenConstant.LastName, person.LastName, smsMessage);
+                            smsMessage = ReplaceTokenWithMessageText(EmailTemplateTokenConstant.CentreName, centreName, smsMessage);
+
+                            _coditechSMS.SendSMS(centreCode, smsMessage, $"{person.CallingCode}{person.MobileNumber}");
+                        }
+                        catch (Exception ex)
+                        {
+                            _coditechLogging.LogMessage($"SMS sending failed: {ex.Message}", CoditechLoggingEnum.Components.SMSService.ToString(), TraceLevel.Error);
+                        }
+                    }
+
+                    // --------- WhatsApp ---------
+                    if (!string.IsNullOrEmpty(person.MobileNumber) && IsNotNull(smsWaTemplate))
+                    {
+                        try
+                        {
+                            string waMessage = smsWaTemplate.EmailTemplate;
+                            waMessage = ReplaceTokenWithMessageText(EmailTemplateTokenConstant.FirstName, person.FirstName, waMessage);
+                            waMessage = ReplaceTokenWithMessageText(EmailTemplateTokenConstant.LastName, person.LastName, waMessage);
+                            waMessage = ReplaceTokenWithMessageText(EmailTemplateTokenConstant.CentreName, centreName, waMessage);
+
+                            _coditechWhatsApp.SendWhatsAppMessage(centreCode, waMessage, $"{person.CallingCode}{person.MobileNumber}");
+                        }
+                        catch (Exception ex)
+                        {
+                            _coditechLogging.LogMessage($"WhatsApp sending failed: {ex.Message}", CoditechLoggingEnum.Components.WhatsAppService.ToString(), TraceLevel.Error);
+                        }
+                    }
                 }
             }
 
             return true;
         }
-
-
     }
 
 }
