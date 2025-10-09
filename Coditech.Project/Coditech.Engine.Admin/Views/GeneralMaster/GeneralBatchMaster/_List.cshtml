@@ -25,13 +25,18 @@
                             <td>@item.BatchFrequency</td>
                             <td>@item.AssignedBy</td>
                             <td>@item.BatchStartDate.ToCoditechDateFormat()</td>
+                            <td>@item.BatchExpireDate.ToCoditechDateFormat()</td>
                             <td>@item.BatchStartTime.ToCoditechTimeFormat()</td>
                             <td>@item.Duration.ToCoditech24HourTimeFormat()</td>
                             <td>
                                 @Html.Partial("~/Views/Shared/Datatable/_DatatableTrueFalse.cshtml", item.IsActive)
                             </td>
                             <td class="text-center data-action">
-                                <a href="../@controllerName/UpdateGeneralBatch?generalBatchMasterId=@item.GeneralBatchMasterId" title="Update" class="btn btn-sm btn-soft-success btn-circle"><i class="fas fa-edit"></i></a><span class="m-2">|</span>
+                                <a href="@Url.Action("UpdateGeneralBatch", controllerName, new { generalBatchMasterId = item.GeneralBatchMasterId })"
+                                   title="Update"
+                                   class="btn btn-sm btn-soft-success btn-circle">
+                                    <i class="fas fa-edit"></i>
+                                </a><span class="m-2">|</span>
 
                                 <!-- Delete Button Triggering Modal -->
                                 <a href="#" title="Delete" class="btn btn-sm btn-soft-danger btn-circle" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_@item.GeneralBatchMasterId"><i class="fas fa-trash-alt"></i></a>
@@ -50,8 +55,12 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                                 <!-- Delete action with cityIds parameter -->
-                                                <a href="../@controllerName/Delete?generalBatchMasterIds=@item.GeneralBatchMasterId&selectedCentreCode=@Model.SelectedCentreCode" class="btn btn-outline-danger">Delete</a>
-                                            </div>
+                                                <a href="@Url.Action("Delete", controllerName,
+                                                            new { generalBatchMasterIds = item.GeneralBatchMasterId, selectedCentreCode = Model.SelectedCentreCode })"
+                                                     class="btn btn-outline-danger">
+                                                    Delete
+                                                </a>
+                                    </div>
                                         </div>
                                     </div>
                                 </div>

@@ -262,6 +262,8 @@ namespace Coditech.API.Common
             builder.Services.AddScoped<IGymUserService, GymUserService>();
             builder.Services.AddScoped<IGymWorkoutPlanService, GymWorkoutPlanService>();
             builder.Services.AddScoped<IGymDashboardService, GymDashboardService>();
+            builder.Services.AddScoped<ISendBirthdayAndAnniversaryMessageService, SendBirthdayAndAnniversaryMessageService>();
+            builder.Services.AddScoped<ISendGymMembershipPlanExpireMessageService, SendGymMembershipPlanExpireMessageService>();
         }
         #endregion
     }

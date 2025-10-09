@@ -22,10 +22,17 @@
                         @if (Model.IsEntityActive)
                         {
                             <a class="btn btn-sm btn-soft-primary float-end"
-                               href="/@controllerName/InsertAssociatedTrainer?dBTMTraineeDetailId=@Model.DBTMTraineeDetailId&personId=@Model.PersonId"
+                               href="@Url.Action(
+                                    "InsertAssociatedTrainer",
+                                    controllerName,
+                                    new { 
+                                        dBTMTraineeDetailId = Model.DBTMTraineeDetailId,
+                                        personId = Model.PersonId
+                                    })"
                                role="button">
                                 <i class="fas fa-plus me-2"></i>Associate Trainer
                             </a>
+
                         }
                     </div>
                     <div class="card-body">

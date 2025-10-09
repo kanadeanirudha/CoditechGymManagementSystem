@@ -87,8 +87,17 @@
                             </div>
 
                             <button type="submit" class="btn btn-success">@AdminResources.LabelSave</button>
-                            <a href="../@controllerName/GetAssociatedTrainerList?SelectedParameter1=@Model.EntityId&SelectedParameter2=@Model.PersonId" class="btn btn-secondary"><i class="ft-x"></i>@AdminResources.LabelCancel</a>
-                        }
+                           <a href="@Url.Action(
+                                    "GetAssociatedTrainerList",
+                                    controllerName,
+                                    new { 
+                                        SelectedParameter1 = Model.EntityId, 
+                                        SelectedParameter2 = Model.PersonId 
+                                    })"
+                               class="btn btn-secondary">
+                                <i class="ft-x"></i>@AdminResources.LabelCancel
+                            </a>
+                                    }
                     </div>
                 </div>
             </div>
