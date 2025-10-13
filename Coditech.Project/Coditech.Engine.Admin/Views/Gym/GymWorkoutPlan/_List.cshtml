@@ -30,7 +30,7 @@
                                 @Html.Partial("~/Views/Shared/Datatable/_DatatableTrueFalse.cshtml", item.IsActive)
                             </td>
                             <td class="text-center data-action">
-                                <a href="../@controllerName/UpdateGymWorkoutPlanDetails?gymWorkoutPlanId=@item.GymWorkoutPlanId" title="Update" class="btn btn-sm btn-soft-success btn-circle"><i class="fas fa-edit"></i></a><span class="m-2">|</span>
+                                <a href="@Url.Action("UpdateGymWorkoutPlanDetails", controllerName, new { gymWorkoutPlanId = @item.GymWorkoutPlanId })" title="Update" class="btn btn-sm btn-soft-success btn-circle"><i class="fas fa-edit"></i></a><span class="m-2">|</span>
                                 <!-- Delete Button -->
                                 <a href="#" title="Delete" class="btn btn-sm btn-soft-danger btn-circle" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_@item.GymWorkoutPlanId">
                                     <i class="fas fa-trash-alt"></i>
@@ -51,7 +51,7 @@
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                                 <!-- Delete action with selectedCentreCode parameter -->
 
-                                                <a href="../@controllerName/DeleteWorkoutPlanDetailsList?gymWorkoutPlanId=@item.GymWorkoutPlanId&SelectedCentreCode=@Model.SelectedCentreCode" class="btn btn-outline-danger" onclick="GymWorkoutPlan.DeleteWorkoutPlanDetailsList('@item.GymWorkoutPlanId')">Delete</a>
+                                                <a href="@Url.Action("DeleteWorkoutPlanDetailsList", controllerName, new { gymWorkoutPlanId = @item.GymWorkoutPlanId, SelectedCentreCode = @Model.SelectedCentreCode })" class="btn btn-outline-danger" onclick="GymWorkoutPlan.DeleteWorkoutPlanDetailsList('@item.GymWorkoutPlanId')">Delete</a>
                                             </div>
                                         </div>
                                     </div>
@@ -59,7 +59,7 @@
                             </td>
                         </tr>
                     }
-                }       
+                }
             </tbody>
         </table>
     </div>

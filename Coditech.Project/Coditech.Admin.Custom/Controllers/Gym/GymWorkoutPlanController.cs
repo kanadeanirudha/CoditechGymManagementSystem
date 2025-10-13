@@ -181,11 +181,11 @@ namespace Coditech.Admin.Controllers
                 SetNotificationMessage(!status
                     ? GetErrorNotificationMessage(GeneralResources.DeleteErrorMessage)
                     : GetSuccessNotificationMessage(GeneralResources.DeleteMessage));
-                return RedirectToAction("GetWorkoutPlanDetails", new  { GymWorkoutPlanId = gymWorkoutPlanId, WorkoutWeekNumber = workoutWeekNumber });
+                return RedirectToAction("GetWorkoutPlanDetails", new { gymWorkoutPlanId, workoutWeekNumber });
             }
 
             SetNotificationMessage(GetErrorNotificationMessage(GeneralResources.DeleteErrorMessage));
-            return RedirectToAction("GetWorkoutPlanDetails", new { GymWorkoutPlanId = gymWorkoutPlanId, WorkoutWeekNumber = workoutWeekNumber });
+            return RedirectToAction("GetWorkoutPlanDetails", new { gymWorkoutPlanId, workoutWeekNumber });
         }
 
         //DeleteWorkoutPlanDetailsDay
@@ -201,15 +201,15 @@ namespace Coditech.Admin.Controllers
                 SetNotificationMessage(!status
                     ? GetErrorNotificationMessage(GeneralResources.DeleteErrorMessage)
                     : GetSuccessNotificationMessage(GeneralResources.DeleteMessage));
-                return RedirectToAction("GetWorkoutPlanDetails", new { GymWorkoutPlanId = gymWorkoutPlanId, WorkoutWeekNumber = workoutWeekNumber, WorkoutDayNumber = workoutDayNumber });
+                return RedirectToAction("GetWorkoutPlanDetails", new { gymWorkoutPlanId, workoutWeekNumber, workoutDayNumber });
             }
 
             SetNotificationMessage(GetErrorNotificationMessage(GeneralResources.DeleteErrorMessage));
-            return RedirectToAction("GetWorkoutPlanDetails", new { GymWorkoutPlanId = gymWorkoutPlanId, WorkoutWeekNumber = workoutWeekNumber, WorkoutDayNumber = workoutDayNumber });
+            return RedirectToAction("GetWorkoutPlanDetails", new { gymWorkoutPlanId, workoutWeekNumber, workoutDayNumber });
         }
 
 
-        public virtual ActionResult DeleteWorkoutPlanDetailsSet(long gymWorkoutPlanDetailId,long gymWorkoutPlanId, string selectedCentreCode)
+        public virtual ActionResult DeleteWorkoutPlanDetailsSet(long gymWorkoutPlanDetailId, long gymWorkoutPlanId, string selectedCentreCode)
         {
             string message = string.Empty;
             bool status = false;
@@ -220,11 +220,11 @@ namespace Coditech.Admin.Controllers
                 SetNotificationMessage(!status
                     ? GetErrorNotificationMessage(GeneralResources.DeleteErrorMessage)
                     : GetSuccessNotificationMessage(GeneralResources.DeleteMessage));
-                return RedirectToAction("GetWorkoutPlanDetails", new  { GymWorkoutPlanDetailId = gymWorkoutPlanDetailId, GymWorkoutPlanId = gymWorkoutPlanId });
+                return RedirectToAction("GetWorkoutPlanDetails", new { gymWorkoutPlanDetailId, gymWorkoutPlanId });
             }
 
             SetNotificationMessage(GetErrorNotificationMessage(GeneralResources.DeleteErrorMessage));
-            return RedirectToAction("GetWorkoutPlanDetails", new { GymWorkoutPlanDetailId = gymWorkoutPlanDetailId, GymWorkoutPlanId = gymWorkoutPlanId });
+            return RedirectToAction("GetWorkoutPlanDetails", new { gymWorkoutPlanDetailId, gymWorkoutPlanId });
         }
 
         #endregion        
@@ -234,7 +234,7 @@ namespace Coditech.Admin.Controllers
         #region Gym Associate Member
         public virtual ActionResult GetAssociatedMemberList(DataTableViewModel dataTableViewModel)
         {
-            GymWorkoutPlanUserListViewModel list = _gymWorkoutPlanAgent.GetAssociatedMemberList(Convert.ToInt64(dataTableViewModel.SelectedParameter1), dataTableViewModel);           
+            GymWorkoutPlanUserListViewModel list = _gymWorkoutPlanAgent.GetAssociatedMemberList(Convert.ToInt64(dataTableViewModel.SelectedParameter1), dataTableViewModel);
             if (AjaxHelper.IsAjaxRequest)
             {
                 return PartialView("~/Views/Gym/GymWorkoutPlan/_AssociatedMemberList.cshtml", list);
@@ -244,7 +244,7 @@ namespace Coditech.Admin.Controllers
 
 
         }
-       
+
         [HttpGet]
         public virtual ActionResult GetAssociateUnAssociateWorkoutPlanUser(GymWorkoutPlanUserViewModel gymWorkoutPlanUserViewModel)
         {

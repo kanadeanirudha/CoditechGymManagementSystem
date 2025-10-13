@@ -5,13 +5,13 @@
     string controllerName = ViewContext.RouteData.Values["controller"].ToString();
     string actionName = ViewContext.RouteData.Values["action"].ToString();
     DropdownViewModel centreDropdown = new DropdownViewModel()
-            {
-                DropdownType = DropdownTypeEnum.AccessibleCentre.ToString(),
-                DropdownName = "CentreCode",
-                DropdownSelectedValue = Model.CentreCode,
-                ChangeEvent = "",
-                IsDisabled = Model.GymMembershipPlanId > 0
-            };
+    {
+        DropdownType = DropdownTypeEnum.AccessibleCentre.ToString(),
+        DropdownName = "CentreCode",
+        DropdownSelectedValue = Model.CentreCode,
+        ChangeEvent = "",
+        IsDisabled = Model.GymMembershipPlanId > 0
+    };
 }
 <!-- Page Content-->
 <div class="page-content mt-5">
@@ -58,15 +58,15 @@
                                     <div class="mb-3">
                                         @Html.LabelFor(x => x.PlanTypeEnumId, new { @class = "form-label required" })
                                         @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", new DropdownViewModel()
-                               {
-                                   DropdownSelectedValue = Model.PlanTypeEnumId.ToString(),
-                                   DropdownName = "PlanTypeEnumId",
-                                   GroupCode = DropdownCustomTypeEnum.GymPlanType.ToString(),
-                                   AddSelectItem = true,
-                                   IsDisabled = Model.GymMembershipPlanId > 0
-                               })
-                                        @Html.ValidationMessageFor(x => x.PlanTypeEnumId, null, new { id = "errorPlanTypeEnumId" })
-                                        @if (Model.GymMembershipPlanId > 0)
+                                        {
+                                            DropdownSelectedValue = Model.PlanTypeEnumId.ToString(),
+                                                                        DropdownName = "PlanTypeEnumId",
+                                                                        GroupCode = DropdownCustomTypeEnum.GymPlanType.ToString(),
+                                                                        AddSelectItem = true,
+                                                                        IsDisabled = Model.GymMembershipPlanId > 0
+                                                                        })
+                                    @Html.ValidationMessageFor(x => x.PlanTypeEnumId, null, new { id = "errorPlanTypeEnumId" })
+                                    @if (Model.GymMembershipPlanId > 0)
                                         {
                                             @Html.HiddenFor(m => m.PlanTypeEnumId)
                                         }
@@ -120,25 +120,25 @@
                                     <div class="mb-3">
                                         @Html.LabelFor(x => x.PlanDurationTypeEnumId, new { @class = "form-label required" })
                                         @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", new DropdownViewModel()
-                               {
-                                   DropdownSelectedValue = Model.PlanDurationTypeEnumId.ToString(),
-                                   DropdownName = "PlanDurationTypeEnumId",
-                                   GroupCode = DropdownCustomTypeEnum.GymPlanDurationType.ToString(),
-                                   AddSelectItem = false,
-                                   ChangeEvent = "GymMembershipPlan.ChangePlanType()",
-                                   IsDisabled = Model.GymMembershipPlanId > 0
-                               })
-                                        @Html.ValidationMessageFor(x => x.PlanDurationTypeEnumId, null, new { id = "errorPlanDurationTypeEnumId" })
-                                        @if (Model.GymMembershipPlanId > 0)
+                                        {
+                                            DropdownSelectedValue = Model.PlanDurationTypeEnumId.ToString(),
+                                                                        DropdownName = "PlanDurationTypeEnumId",
+                                                                        GroupCode = DropdownCustomTypeEnum.GymPlanDurationType.ToString(),
+                                                                        AddSelectItem = false,
+                                                                        ChangeEvent = "GymMembershipPlan.ChangePlanType()",
+                                                                        IsDisabled = Model.GymMembershipPlanId > 0
+                                                                        })
+                                    @Html.ValidationMessageFor(x => x.PlanDurationTypeEnumId, null, new { id = "errorPlanDurationTypeEnumId" })
+                                    @if (Model.GymMembershipPlanId > 0)
                                         {
                                             @Html.HiddenFor(m => m.PlanDurationTypeEnumId)
                                         }
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4" id="PlanDurationInMonthDivId" style="display: @(Model.GymMembershipPlanId == 0 || string.Equals(Model.PlanDurationType,"duration",StringComparison.InvariantCultureIgnoreCase)? "block" : "none")">
+                                <div class="col-lg-4" id="PlanDurationInMonthDivId" style="display: @(Model.GymMembershipPlanId == 0 || string.Equals(Model.PlanDurationType, "duration", StringComparison.InvariantCultureIgnoreCase) ? "block" : "none")">
                                     <div class="mb-3">
-                                        @Html.LabelFor(x => x.PlanDurationInMonth, new { @class = "form-label required"})
+                                        @Html.LabelFor(x => x.PlanDurationInMonth, new { @class = "form-label required" })
                                         @if (Model.IsEditable || Model.GymMembershipPlanId == 0)
                                         {
                                             @Html.TextBoxFor(x => x.PlanDurationInMonth, new { @class = "form-control", @onkeypress = "return CoditechCommon.ValidNumeric()" })
@@ -151,7 +151,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4" id="PlanDurationInDaysDivId" style="display: @(Model.GymMembershipPlanId == 0 || string.Equals(Model.PlanDurationType,"duration",StringComparison.InvariantCultureIgnoreCase)? "block" : "none")">
+                                <div class="col-lg-4" id="PlanDurationInDaysDivId" style="display: @(Model.GymMembershipPlanId == 0 || string.Equals(Model.PlanDurationType, "duration", StringComparison.InvariantCultureIgnoreCase) ? "block" : "none")">
                                     <div class="mb-3">
                                         @Html.LabelFor(x => x.PlanDurationInDays, new { @class = "form-label required" })
                                         @if (Model.IsEditable || Model.GymMembershipPlanId == 0)
@@ -165,7 +165,7 @@
                                         @Html.ValidationMessageFor(x => x.PlanDurationInDays)
                                     </div>
                                 </div>
-                                <div class="col-lg-4" id="PlanDurationInSessionDivId" style="display: @(Model.GymMembershipPlanId > 0 && string.Equals(Model.PlanDurationType,AdminConstants.PlanSessionType,StringComparison.InvariantCultureIgnoreCase)? "block" : "none")">
+                                <div class="col-lg-4" id="PlanDurationInSessionDivId" style="display: @(Model.GymMembershipPlanId > 0 && string.Equals(Model.PlanDurationType, AdminConstants.PlanSessionType, StringComparison.InvariantCultureIgnoreCase) ? "block" : "none")">
                                     <div class="mb-3">
                                         @Html.LabelFor(x => x.PlanDurationInSession, new { @class = "form-label required" })
                                         @if (Model.IsEditable || Model.GymMembershipPlanId == 0)
@@ -230,7 +230,7 @@
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-success">@AdminResources.LabelSave</button>
-                            <a href="../@controllerName/Cancel?SelectedCentreCode=@Model.CentreCode" class="btn btn-secondary"><i class="ft-x"></i>@AdminResources.LabelCancel</a>
+                            <a href="@Url.Action("Cancel", controllerName, new { SelectedCentreCode = @Model.CentreCode })" class="btn btn-secondary"><i class="ft-x"></i>@AdminResources.LabelCancel</a>
                         }
                     </div>
                 </div>
