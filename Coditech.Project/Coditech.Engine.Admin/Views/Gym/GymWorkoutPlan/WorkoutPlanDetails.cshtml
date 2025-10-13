@@ -34,7 +34,7 @@
                                         <div class="card-header d-flex justify-content-between">
                                             <h4 class="card-title">Week @week</h4>
                                             <div class="d-flex justify-content-end">
-                                             @*    <a data-bs-toggle="modal" data-bs-target="#@addGymWorkoutPlanDetailsModel.ModelPopUpId" href="void javascritp(0)" onclick="GymWorkoutPlan.AddWorkoutPlanDetails('@addGymWorkoutPlanDetailsModel.ModalContentId','@Model.GymWorkoutPlanId','@week')" title="Add " class="btn btn-sm btn-soft-success btn-circle float-end"><i class="fas ti-plus"></i></a> *@
+                                                @*    <a data-bs-toggle="modal" data-bs-target="#@addGymWorkoutPlanDetailsModel.ModelPopUpId" href="void javascritp(0)" onclick="GymWorkoutPlan.AddWorkoutPlanDetails('@addGymWorkoutPlanDetailsModel.ModalContentId','@Model.GymWorkoutPlanId','@week')" title="Add " class="btn btn-sm btn-soft-success btn-circle float-end"><i class="fas ti-plus"></i></a> *@
 
                                                 <!-- Delete Button for week -->
                                                 <a href="#" title="Delete" class="btn btn-sm btn-soft-danger btn-circle" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_Week_@week">
@@ -55,7 +55,7 @@
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                                                 <!-- Delete action with selectedCentreCode parameter -->
-                                                                <a href="../@controllerName/DeleteWorkoutPlanDetailsWeek?gymWorkoutPlanId=@Model.GymWorkoutPlanId&workoutWeekNumber=@week" class="btn btn-outline-danger" onclick="GymWorkoutPlan.DeleteWorkoutPlanDetailsWeek('@Model.GymWorkoutPlanId','@week')">Delete</a>
+                                                                <a href="@Url.Action("DeleteWorkoutPlanDetailsWeek", controllerName, new { gymWorkoutPlanId = @Model.GymWorkoutPlanId, workoutWeekNumber = @week })" class="btn btn-outline-danger" onclick="GymWorkoutPlan.DeleteWorkoutPlanDetailsWeek('@Model.GymWorkoutPlanId','@week')">Delete</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -74,7 +74,7 @@
                                                                 <h4 class="card-title">Day @day</h4>
                                                                 <div class="d-flex justify-content-end">
                                                                     <a data-bs-toggle="modal" data-bs-target="#@addGymWorkoutPlanDetailsModel.ModelPopUpId" href="javascritp:void(0)" onclick="GymWorkoutPlan.AddWorkoutPlanDetails('@addGymWorkoutPlanDetailsModel.ModalContentId','@Model.GymWorkoutPlanId','@week','@day')" title="Add " class="btn btn-sm btn-soft-success btn-circle float-end"><i class="fas ti-plus"></i></a>
-                                                                   @*  <!-- Delete Button for Day-->
+                                                                    @*  <!-- Delete Button for Day-->
                                                                     <a href="#" title="Delete" class="btn btn-sm btn-soft-danger btn-circle" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_Day_@day">
                                                                         <i class="fas fa-trash-alt"></i>
                                                                     </a>
@@ -98,7 +98,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </div> *@
-                                                                    <a href="../@controllerName/DeleteWorkoutPlanDetailsDay?gymWorkoutPlanId=@Model.GymWorkoutPlanId&workoutWeekNumber=@week&workoutDayNumber=@day" title="Delete" class="btn btn-sm btn-soft-danger btn-circle"><i class="fas fa-trash-alt"></i></a>
+                                                                    <a href="@Url.Action("DeleteWorkoutPlanDetailsDay", controllerName, new { gymWorkoutPlanId = @Model.GymWorkoutPlanId, workoutWeekNumber = @week, workoutDayNumber = @day })" title="Delete" class="btn btn-sm btn-soft-danger btn-circle"><i class="fas fa-trash-alt"></i></a>
                                                                 </div>
                                                             </div>
                                                             <div class="card-body">
@@ -146,7 +146,7 @@
                                                                                                         <div class="modal-footer">
                                                                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                                                                                             <!-- Delete action with selectedCentreCode parameter -->
-                                                                                                            <a href="../@controllerName/DeleteWorkoutPlanDetailsSet?gymWorkoutPlanId=@Model.GymWorkoutPlanId&gymWorkoutPlanDetailId=@item.GymWorkoutPlanDetailId" title="Delete" class="btn btn-outline-danger" onclick="GymWorkoutPlan.DeleteWorkoutPlanDetailsSet('@item.GymWorkoutPlanDetailId')">Delete</a>
+                                                                                                            <a href="@Url.Action("DeleteWorkoutPlanDetailsSet", controllerName, new { gymWorkoutPlanId = @Model.GymWorkoutPlanId, gymWorkoutPlanDetailId = @item.GymWorkoutPlanDetailId })" title="Delete" class="btn btn-outline-danger" onclick="GymWorkoutPlan.DeleteWorkoutPlanDetailsSet('@item.GymWorkoutPlanDetailId')">Delete</a>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>

@@ -27,12 +27,12 @@
                                 @Html.Partial("~/Views/Shared/Datatable/_DatatableTrueFalse.cshtml", item.IsSetReminder)
                             </td>
                             <td>@item.ReminderDate.ToCoditechDateFormat()</td>
-                            
+
                             <td class="text-center data-action">
 
                                 <a data-bs-toggle="modal" data-bs-target="#AddUpdateFollowUpModelPopupId" href="void javascritp(0)" onclick="GymMemberDetails.GetMemberFollowUp('AddUpdateFollowUpModelPopupContentId','@Model.GymMemberDetailId','@item.GymMemberFollowUpId','@Model.PersonId')" title="Update Follow-Up" class="btn btn-sm btn-soft-warning btn-circle"><i class="fas fa-edit"></i></a><span class="m-2">|</span>
 
-                               <!-- Delete Button Triggering Modal -->
+                                <!-- Delete Button Triggering Modal -->
                                 <a href="#" title="Delete" class="btn btn-sm btn-soft-danger btn-circle" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_@item.GymMemberDetailId"><i class="fas fa-trash-alt"></i></a>
                                 <!-- Delete Confirmation Modal -->
                                 <div class="modal fade" id="confirmDeleteModal_@item.GymMemberDetailId" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
@@ -49,13 +49,13 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                                 <!-- Delete action with selectedCentreCode parameter -->
-                                                <a href="../@controllerName/DeleteGymMemberFollowUp?gymMemberFollowUpIdIds=@item.GymMemberFollowUpId&gymMemberDetailId=@Model.GymMemberDetailId&personId=@Model.PersonId" class="btn btn-outline-danger">Delete</a>
-                                                
+                                                <a href="@Url.Action("DeleteGymMemberFollowUp", controllerName, new { gymMemberFollowUpIdIds = @item.GymMemberFollowUpId, gymMemberDetailId = @Model.GymMemberDetailId, personId = @Model.PersonId })" class="btn btn-outline-danger">Delete</a>
+
                                             </div>
                                         </div>
                                     </div>
-                            </td> 
-                           
+                            </td>
+
                         </tr>
                     }
                 }

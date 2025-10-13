@@ -45,7 +45,7 @@
                                 @Html.Partial("~/Views/Shared/Datatable/_DatatableTrueFalse.cshtml", item.IsActive)
                             </td>
                             <td class="text-center data-action">
-                                <a href="../@controllerName/UpdateGymMembershipPlan?gymMembershipPlanId=@item.GymMembershipPlanId" title="Update" class="btn btn-sm btn-soft-success btn-circle"><i class="fas fa-edit"></i></a><span class="m-2">|</span>
+                                <a href="@Url.Action("UpdateGymMembershipPlan", controllerName, new { gymMembershipPlanId = @item.GymMembershipPlanId })" title="Update" class="btn btn-sm btn-soft-success btn-circle"><i class="fas fa-edit"></i></a><span class="m-2">|</span>
                                 <!-- Delete Button Triggering Modal -->
                                 <a href="#" title="Delete" class="btn btn-sm btn-soft-danger btn-circle" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_@item.GymMembershipPlanId"><i class="fas fa-trash-alt"></i></a>
                                 <!-- Delete Confirmation Modal -->
@@ -63,7 +63,7 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                                 <!-- Delete action with selectedCentreCode parameter -->
-                                                <a href="/@controllerName/Delete?gymMembershipPlanIds=@item.GymMembershipPlanId&selectedCentreCode=@Model.SelectedCentreCode" class="btn btn-outline-danger">Delete</a>
+                                                <a href="@Url.Action("Delete", controllerName, new { gymMembershipPlanIds = @item.GymMembershipPlanId, selectedCentreCode = @Model.SelectedCentreCode })" class="btn btn-outline-danger">Delete</a>
                                             </div>
                                         </div>
                                     </div>

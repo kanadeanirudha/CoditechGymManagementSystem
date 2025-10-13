@@ -35,54 +35,54 @@
                                     <div class="mb-3">
                                         @Html.LabelFor(x => x.GymGroupEnumId, new { @class = "form-label required" })
                                         @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", new DropdownViewModel()
-                               {
-                                   DropdownSelectedValue = Model.GymGroupEnumId.ToString(),
-                                   DropdownName = "GymGroupEnumId",
-                                   GroupCode = DropdownCustomTypeEnum.GymGroup.ToString(),
-                                   IsRequired = true
-                               })
-                                        @Html.ValidationMessageFor(x => x.GymGroupEnumId)
+                                        {
+                                            DropdownSelectedValue = Model.GymGroupEnumId.ToString(),
+                                                                        DropdownName = "GymGroupEnumId",
+                                                                        GroupCode = DropdownCustomTypeEnum.GymGroup.ToString(),
+                                                                        IsRequired = true
+                                                                        })
+                                    @Html.ValidationMessageFor(x => x.GymGroupEnumId)
 
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        @Html.LabelFor(x => x.SourceEnumId, new { @class = "form-label required" })
-                                        @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", new DropdownViewModel()
-                               {
-                                   DropdownSelectedValue = Model.SourceEnumId.ToString(),
-                                   DropdownName = "SourceEnumId",
-                                   GroupCode = DropdownTypeEnum.LeadSource.ToString(),
-                                   IsRequired = true
-                               })
-                                        @Html.ValidationMessageFor(x => x.SourceEnumId)
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        @Html.LabelFor(x => x.MedicalHistory, new { @class = "form-label" })
-                                        @Html.TextAreaFor(x => x.MedicalHistory, new { @class = "form-control", @maxlength = "500" })
-                                        @Html.ValidationMessageFor(x => x.MedicalHistory)
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        @Html.LabelFor(x => x.PastInjuries, new { @class = "form-label" })
-                                        @Html.TextAreaFor(x => x.PastInjuries, new { @class = "form-control", @maxlength = "500" })
-                                        @Html.ValidationMessageFor(x => x.PastInjuries)
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="mb-3">
-                                        @Html.LabelFor(x => x.OtherInformation, new { @class = "form-label" })
-                                        @Html.TextAreaFor(x => x.OtherInformation, new { @class = "form-control", @maxlength = "500" })
-                                        @Html.ValidationMessageFor(x => x.OtherInformation)
-                                    </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-success">@AdminResources.LabelSave</button>
-                            <a href="../@controllerName/List?SelectedCentreCode=@Model.CentreCode" class="btn btn-secondary"><i class="ft-x"></i>@AdminResources.LabelCancel</a>
-                        }
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    @Html.LabelFor(x => x.SourceEnumId, new { @class = "form-label required" })
+                                    @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", new DropdownViewModel()
+                                                                        {
+                                            DropdownSelectedValue = Model.SourceEnumId.ToString(),
+                                                                        DropdownName = "SourceEnumId",
+                                                                        GroupCode = DropdownTypeEnum.LeadSource.ToString(),
+                                                                        IsRequired = true
+                                                                        })
+                                    @Html.ValidationMessageFor(x => x.SourceEnumId)
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    @Html.LabelFor(x => x.MedicalHistory, new { @class = "form-label" })
+                                    @Html.TextAreaFor(x => x.MedicalHistory, new { @class = "form-control", @maxlength = "500" })
+                                    @Html.ValidationMessageFor(x => x.MedicalHistory)
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    @Html.LabelFor(x => x.PastInjuries, new { @class = "form-label" })
+                                    @Html.TextAreaFor(x => x.PastInjuries, new { @class = "form-control", @maxlength = "500" })
+                                    @Html.ValidationMessageFor(x => x.PastInjuries)
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    @Html.LabelFor(x => x.OtherInformation, new { @class = "form-label" })
+                                    @Html.TextAreaFor(x => x.OtherInformation, new { @class = "form-control", @maxlength = "500" })
+                                    @Html.ValidationMessageFor(x => x.OtherInformation)
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">@AdminResources.LabelSave</button>
+                        <a href="@Url.Action("List", controllerName, new { SelectedCentreCode = @Model.CentreCode })" class="btn btn-secondary"><i class="ft-x"></i>@AdminResources.LabelCancel</a>
+                                                }
                     </div>
                 </div>
             </div>

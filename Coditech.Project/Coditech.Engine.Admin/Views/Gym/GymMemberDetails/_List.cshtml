@@ -24,7 +24,8 @@
                     {
                         {
                             css = item.IsActive ? "" : "pointer-events: none;";
-                        };
+                        }
+                        ;
                         <tr>
                             <td style="text-align: center; width: 0px">
                                 @if (!string.IsNullOrEmpty(item.ImagePath))
@@ -42,13 +43,13 @@
                             <td>@item.FirstName</td>
                             <td>@item.LastName</td>
                             <td>@item.MobileNumber</td>
-                            <td>@item.EmailId</td>                           
+                            <td>@item.EmailId</td>
 
                             <td>
                                 @Html.Partial("~/Views/Shared/Datatable/_DatatableTrueFalse.cshtml", item.IsActive)
                             </td>
                             <td class="text-center data-action">
-                                <a href="../@controllerName/UpdateMemberPersonalDetails?gymMemberDetailId=@item.GymMemberDetailId&personId=@item.PersonId" title="Update" class="btn btn-sm btn-soft-success btn-circle"><i class="fas fa-edit"></i></a><span class="m-2">|</span>
+                                <a href="@Url.Action("UpdateMemberPersonalDetails", controllerName, new { gymMemberDetailId = @item.GymMemberDetailId, personId = @item.PersonId })" title="Update" class="btn btn-sm btn-soft-success btn-circle"><i class="fas fa-edit"></i></a><span class="m-2">|</span>
                                 <a data-bs-toggle="modal" data-bs-target="#@addFollowUpModel.ModelPopUpId" href="void javascritp(0)" onclick="GymMemberDetails.GetMemberFollowUp('@addFollowUpModel.ModalContentId','@item.GymMemberDetailId','0','@item.PersonId')" title="Add Follow-Up" class="btn btn-sm btn-soft-warning btn-circle"><i class="fas fa-handshake"></i></a><span class="m-2">|</span>
                                 <a data-bs-toggle="modal" data-bs-target="#@manualAttendanceModel.ModelPopUpId" style="@(item.IsActive ? "" : "pointer-events: none;") @(item.IsActive ? "" : "color: grey;")" href="void(0)" onclick="@(item.IsActive ? $"GymMemberDetails.CreatEditGeneralPersonAttendanceDetails('{manualAttendanceModel.ModalContentId}','{item.GymMemberDetailId}','0','{item.PersonId}')" : "return false;")" title="Manual Attendance" class="btn btn-sm btn-soft-info btn-circle">
                                     <i class="fas fa-calendar-check"></i>

@@ -95,7 +95,7 @@
                                         else
                                         {
                                             @Html.TextBoxFor(x => x.NumberOfDaysPerWeek, new { @class = "form-control", @min = "1", @max = "7" })
-                                        }                                      
+                                        }
                                         @Html.ValidationMessageFor(x => x.NumberOfDaysPerWeek)
                                     </div>
                                 </div>
@@ -109,7 +109,7 @@
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-success">@AdminResources.LabelSave</button>
-                            <a href="../@controllerName/Cancel?SelectedCentreCode=@Model.CentreCode" class="btn btn-secondary"><i class="ft-x"></i>@AdminResources.LabelCancel</a>
+                            <a href="@Url.Action("Cancel", controllerName, new { SelectedCentreCode = @Model.CentreCode })" class="btn btn-secondary"><i class="ft-x"></i>@AdminResources.LabelCancel</a>
                         }
                     </div>
                 </div>
