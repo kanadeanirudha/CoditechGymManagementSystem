@@ -54,7 +54,14 @@ namespace Coditech.Admin.Controllers
                 if (!gymMembershipPlanViewModel.HasError)
                 {
                     SetNotificationMessage(GetSuccessNotificationMessage(GeneralResources.RecordAddedSuccessMessage));
-                    return RedirectToAction("List", new DataTableViewModel { SelectedCentreCode = gymMembershipPlanViewModel.CentreCode });
+                    if (string.Equals(gymMembershipPlanViewModel.ActionMode, AdminConstants.ActionModeSave, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return RedirectToAction("UpdateGymMembershipPlan", new { gymMembershipPlanId = gymMembershipPlanViewModel.GymMembershipPlanId });
+                    }
+                    else if (string.Equals(gymMembershipPlanViewModel.ActionMode, AdminConstants.ActionModeSaveAndClose, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return RedirectToAction(AdminConstants.ActionRedirectToList, new DataTableViewModel { SelectedCentreCode = gymMembershipPlanViewModel.CentreCode });
+                    }
                 }
             }
 			gymMembershipPlanViewModel.AllGeneralServices = _gymMembershipPlanAgent.AllGeneralServices();
@@ -78,7 +85,14 @@ namespace Coditech.Admin.Controllers
                 SetNotificationMessage(_gymMembershipPlanAgent.UpdateGymMembershipPlan(gymMembershipPlanViewModel).HasError
                 ? GetErrorNotificationMessage(GeneralResources.UpdateErrorMessage)
                 : GetSuccessNotificationMessage(GeneralResources.UpdateMessage));
-                return RedirectToAction("UpdateGymMembershipPlan", new { gymMembershipPlanId = gymMembershipPlanViewModel.GymMembershipPlanId});
+                if (string.Equals(gymMembershipPlanViewModel.ActionMode, AdminConstants.ActionModeSave, StringComparison.OrdinalIgnoreCase))
+                {
+                    return RedirectToAction("UpdateGymMembershipPlan", new { gymMembershipPlanId = gymMembershipPlanViewModel.GymMembershipPlanId });
+                }
+                else if (string.Equals(gymMembershipPlanViewModel.ActionMode, AdminConstants.ActionModeSaveAndClose, StringComparison.OrdinalIgnoreCase))
+                {
+                    return RedirectToAction(AdminConstants.ActionRedirectToList, new DataTableViewModel { SelectedCentreCode = gymMembershipPlanViewModel.CentreCode });
+                }
             }
 			gymMembershipPlanViewModel.AllGeneralServices = _gymMembershipPlanAgent.AllGeneralServices();
 			return View(createEdit, gymMembershipPlanViewModel);

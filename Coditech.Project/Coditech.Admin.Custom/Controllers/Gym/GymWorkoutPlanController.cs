@@ -56,8 +56,14 @@ namespace Coditech.Admin.Controllers
                 if (!gymWorkoutPlanViewModel.HasError)
                 {
                     SetNotificationMessage(GetSuccessNotificationMessage(GeneralResources.RecordAddedSuccessMessage));
-                    //return RedirectToAction("List", CreateActionDataTable());
-                    return RedirectToAction("List", new { selectedCentreCode = gymWorkoutPlanViewModel.CentreCode });
+                    if (string.Equals(gymWorkoutPlanViewModel.ActionMode, AdminConstants.ActionModeSave, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return RedirectToAction("UpdateGymWorkoutPlanDetails", new { gymWorkoutPlanId = gymWorkoutPlanViewModel.GymWorkoutPlanId});
+                    }
+                    else if (string.Equals(gymWorkoutPlanViewModel.ActionMode, AdminConstants.ActionModeSaveAndClose, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return RedirectToAction(AdminConstants.ActionRedirectToList, new  DataTableViewModel{ SelectedCentreCode = gymWorkoutPlanViewModel.CentreCode });
+                    }
                 }
             }
             SetNotificationMessage(GetErrorNotificationMessage(gymWorkoutPlanViewModel.ErrorMessage));
@@ -80,7 +86,14 @@ namespace Coditech.Admin.Controllers
                 SetNotificationMessage(_gymWorkoutPlanAgent.UpdateGymWorkoutPlan(gymWorkoutPlanViewModel).HasError
                 ? GetErrorNotificationMessage(GeneralResources.UpdateErrorMessage)
                 : GetSuccessNotificationMessage(GeneralResources.UpdateMessage));
-                return RedirectToAction("GymWorkoutPlan", new { gymWorkoutPlanId = gymWorkoutPlanViewModel.GymWorkoutPlanId });
+                if (string.Equals(gymWorkoutPlanViewModel.ActionMode, AdminConstants.ActionModeSave, StringComparison.OrdinalIgnoreCase))
+                {
+                    return RedirectToAction("GymWorkoutPlan", new { gymWorkoutPlanId = gymWorkoutPlanViewModel.GymWorkoutPlanId });
+                }
+                else if (string.Equals(gymWorkoutPlanViewModel.ActionMode, AdminConstants.ActionModeSaveAndClose, StringComparison.OrdinalIgnoreCase))
+                {
+                    return RedirectToAction(AdminConstants.ActionRedirectToList, new DataTableViewModel { SelectedCentreCode = gymWorkoutPlanViewModel.CentreCode });
+                }
             }
             return View(createEditGymWorkoutPlan, gymWorkoutPlanViewModel);
         }
@@ -100,7 +113,14 @@ namespace Coditech.Admin.Controllers
                 SetNotificationMessage(_gymWorkoutPlanAgent.UpdateGymWorkoutPlan(gymWorkoutPlanViewModel).HasError
                 ? GetErrorNotificationMessage(GeneralResources.UpdateErrorMessage)
                 : GetSuccessNotificationMessage(GeneralResources.UpdateMessage));
-                return RedirectToAction("GymWorkoutPlan", new { gymWorkoutPlanId = gymWorkoutPlanViewModel.GymWorkoutPlanId });
+                if (string.Equals(gymWorkoutPlanViewModel.ActionMode, AdminConstants.ActionModeSave, StringComparison.OrdinalIgnoreCase))
+                {
+                    return RedirectToAction("GymWorkoutPlan", new { gymWorkoutPlanId = gymWorkoutPlanViewModel.GymWorkoutPlanId });
+                }
+                else if (string.Equals(gymWorkoutPlanViewModel.ActionMode, AdminConstants.ActionModeSaveAndClose, StringComparison.OrdinalIgnoreCase))
+                {
+                    return RedirectToAction(AdminConstants.ActionRedirectToList, new DataTableViewModel { SelectedCentreCode = gymWorkoutPlanViewModel.CentreCode });
+                }
             }
             return View("~/Views/Gym/GymWorkoutPlan/GymWorkoutPlan.cshtml", gymWorkoutPlanViewModel);
         }
