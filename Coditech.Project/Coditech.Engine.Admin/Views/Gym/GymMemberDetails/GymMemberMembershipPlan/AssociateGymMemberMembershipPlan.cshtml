@@ -5,23 +5,30 @@
     Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
     keyValuePairs.Add("GymMemberDetailId", Model.GymMemberDetailId.ToString());
     keyValuePairs.Add("PersonId", Model.PersonId.ToString());
+    PageHeaderViewModel headerModel = new PageHeaderViewModel
+    {
+        Title = $"Associate Membership Plan - {Model.FirstName} {Model.LastName}",
+        SaveButtonText = GeneralResources.SaveButtonText,
+        CancelUrl = Url.Action(AdminConstants.ActionRedirectToList, controllerName),
+        CancelButtonText = GeneralResources.CancelButtonText,
+        ControllerName = controllerName,
+        ActionName = "AssociateGymMemberMembershipPlan",
+        FormId = "frmAssociateGymMemberMembershipPlan",
+    };
 }
 <!-- Page Content-->
-<div class="page-content mt-5">
-    <div class="container-fluid">
+<div class="page-content">
+    <div class="container-fluid mt-5">
         <div class="row">
             <div class="col-lg-2">
                 @Html.Partial("~/Views/Gym/GymMemberDetails/_GymMemberDetailsSidePannel.cshtml", keyValuePairs)
             </div>
             <div class="col-lg-10">
                 <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Associate Membership Plan- @Model.FirstName @Model.LastName</span>
-
-                    </div>
                     <div class="card-body">
                         @using (Html.BeginForm("AssociateGymMemberMembershipPlan", controllerName, FormMethod.Post, new { id = "frmAssociateGymMemberMembershipPlan" }))
                         {
+                            @Html.Partial("~/Views/Shared/_SaveAndCloseButtonLayout.cshtml", headerModel)
                             <input type="hidden" id="hdnMaximunDiscount" value="0" />
                             @Html.HiddenFor(x => x.GymMembershipPlanId)
                             @Html.HiddenFor(x => x.GymMemberDetailId)
@@ -95,8 +102,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" id="saveDraft" class="btn btn-success" data-test-selector="linkSave" onclick="GymMemberMembershipPlan.AssociateGymMemberMembershipPlan()">@AdminResources.LabelSave</button>
-                        <a href="@Url.Action("List", controllerName)" class="btn btn-secondary"><i class="ft-x"></i>@AdminResources.LabelCancel</a>
+                            @* <button type="button" id="saveDraft" class="btn btn-success" data-test-selector="linkSave" onclick="GymMemberMembershipPlan.AssociateGymMemberMembershipPlan()">@AdminResources.LabelSave</button> *@
+                        @* <a href="@Url.Action("List", controllerName)" class="btn btn-secondary"><i class="ft-x"></i>@AdminResources.LabelCancel</a> *@
                         }
                     </div>
                 </div>

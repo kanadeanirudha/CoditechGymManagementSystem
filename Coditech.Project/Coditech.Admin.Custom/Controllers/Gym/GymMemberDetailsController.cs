@@ -4,9 +4,7 @@ using Coditech.Admin.Utilities;
 using Coditech.Admin.ViewModel;
 using Coditech.Common.Helper.Utilities;
 using Coditech.Resources;
-
 using Microsoft.AspNetCore.Mvc;
-
 namespace Coditech.Admin.Controllers
 {
     public class GymMemberDetailsController : BaseController
@@ -91,7 +89,14 @@ namespace Coditech.Admin.Controllers
                 if (!gymCreateEditMemberViewModel.HasError)
                 {
                     SetNotificationMessage(GetSuccessNotificationMessage(GeneralResources.RecordAddedSuccessMessage));
-                    return RedirectToAction("List", new { selectedCentreCode = gymCreateEditMemberViewModel.SelectedCentreCode });
+                    if (string.Equals(gymCreateEditMemberViewModel.ActionMode, AdminConstants.ActionModeSave, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return RedirectToAction("UpdateMemberPersonalDetails", new { gymMemberDetailId = gymCreateEditMemberViewModel.GymMemberDetailId, personId = gymCreateEditMemberViewModel.PersonId });
+                    }
+                    else if (string.Equals(gymCreateEditMemberViewModel.ActionMode, AdminConstants.ActionModeSaveAndClose, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return RedirectToAction(AdminConstants.ActionRedirectToList, new DataTableViewModel { SelectedCentreCode = gymCreateEditMemberViewModel.SelectedCentreCode });
+                    }
                 }
             }
             SetNotificationMessage(GetErrorNotificationMessage(gymCreateEditMemberViewModel.ErrorMessage));
@@ -113,7 +118,14 @@ namespace Coditech.Admin.Controllers
                 SetNotificationMessage(_gymMemberDetailsAgent.UpdateMemberPersonalDetails(gymCreateEditMemberViewModel).HasError
                 ? GetErrorNotificationMessage(GeneralResources.UpdateErrorMessage)
                 : GetSuccessNotificationMessage(GeneralResources.UpdateMessage));
-                return RedirectToAction("UpdateMemberPersonalDetails", new { gymMemberDetailId = gymCreateEditMemberViewModel.GymMemberDetailId, personId = gymCreateEditMemberViewModel.PersonId });
+                if (string.Equals(gymCreateEditMemberViewModel.ActionMode, AdminConstants.ActionModeSave, StringComparison.OrdinalIgnoreCase))
+                {
+                    return RedirectToAction("UpdateMemberPersonalDetails", new { gymMemberDetailId = gymCreateEditMemberViewModel.GymMemberDetailId, personId = gymCreateEditMemberViewModel.PersonId });
+                }
+                else if (string.Equals(gymCreateEditMemberViewModel.ActionMode, AdminConstants.ActionModeSaveAndClose, StringComparison.OrdinalIgnoreCase))
+                {
+                    return RedirectToAction(AdminConstants.ActionRedirectToList, new DataTableViewModel { SelectedCentreCode = gymCreateEditMemberViewModel.SelectedCentreCode });
+                }
             }
             return View(createEditGymMember, gymCreateEditMemberViewModel);
         }
@@ -133,7 +145,14 @@ namespace Coditech.Admin.Controllers
                 SetNotificationMessage(_gymMemberDetailsAgent.UpdateGymMemberOtherDetails(gymMemberDetailsViewModel).HasError
                 ? GetErrorNotificationMessage(GeneralResources.UpdateErrorMessage)
                 : GetSuccessNotificationMessage(GeneralResources.UpdateMessage));
-                return RedirectToAction("MemberOtherDetails", new { gymMemberDetailId = gymMemberDetailsViewModel.GymMemberDetailId});
+                if (string.Equals(gymMemberDetailsViewModel.ActionMode, AdminConstants.ActionModeSave, StringComparison.OrdinalIgnoreCase))
+                {
+                    return RedirectToAction("MemberOtherDetails", new { gymMemberDetailId = gymMemberDetailsViewModel.GymMemberDetailId });
+                }
+                else if (string.Equals(gymMemberDetailsViewModel.ActionMode, AdminConstants.ActionModeSaveAndClose, StringComparison.OrdinalIgnoreCase))
+                {
+                    return RedirectToAction(AdminConstants.ActionRedirectToList, new DataTableViewModel { SelectedCentreCode = gymMemberDetailsViewModel.CentreCode });
+                }
             }
             return View("~/Views/Gym/GymMemberDetails/UpdateGymMemberOtherDetails.cshtml", gymMemberDetailsViewModel);
         }
@@ -184,7 +203,7 @@ namespace Coditech.Admin.Controllers
         #endregion 
 
         #region MemberFollowUpList
-        public ActionResult MemberFollowUpList( DataTableViewModel dataTableModel)
+        public ActionResult MemberFollowUpList(DataTableViewModel dataTableModel)
         {
             GymMemberFollowUpListViewModel list = _gymMemberDetailsAgent.GymMemberFollowUpList(Convert.ToInt32(dataTableModel.SelectedParameter1), Convert.ToInt64(dataTableModel.SelectedParameter2), dataTableModel);
             if (AjaxHelper.IsAjaxRequest)
@@ -249,7 +268,7 @@ namespace Coditech.Admin.Controllers
         #endregion
 
         #region Gym Member Attendance
-        public ActionResult MemberAttendanceDetails( DataTableViewModel dataTableModel)
+        public ActionResult MemberAttendanceDetails(DataTableViewModel dataTableModel)
         {
             GeneralPersonAttendanceDetailsListViewModel list = _gymMemberDetailsAgent.GeneralPersonAttendanceDetailsList(Convert.ToInt32(dataTableModel.SelectedParameter1), Convert.ToInt64(dataTableModel.SelectedParameter2), UserTypeCustomEnum.GymMember.ToString(), dataTableModel);
             if (AjaxHelper.IsAjaxRequest)
@@ -413,7 +432,14 @@ namespace Coditech.Admin.Controllers
                 if (!gymMemberMembershipPlanViewModel.HasError)
                 {
                     SetNotificationMessage(GetSuccessNotificationMessage(GeneralResources.RecordAddedSuccessMessage));
-                    return RedirectToAction("GetGymMemberMembershipPlan", new { SelectedParameter1 = gymMemberMembershipPlanViewModel.GymMemberDetailId, SelectedParameter2 = gymMemberMembershipPlanViewModel.PersonId });
+                    if (string.Equals(gymMemberMembershipPlanViewModel.ActionMode, AdminConstants.ActionModeSave, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return RedirectToAction("AssociateGymMemberMembershipPlan", new { gymMemberDetailId = gymMemberMembershipPlanViewModel.GymMemberDetailId, personId = gymMemberMembershipPlanViewModel.PersonId });
+                    }
+                    else if (string.Equals(gymMemberMembershipPlanViewModel.ActionMode, AdminConstants.ActionModeSaveAndClose, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return RedirectToAction("GetGymMemberMembershipPlan", new { SelectedParameter1 = gymMemberMembershipPlanViewModel.GymMemberDetailId, SelectedParameter2 = gymMemberMembershipPlanViewModel.PersonId });
+                    }
                 }
             }
             SetNotificationMessage(GetErrorNotificationMessage(gymMemberMembershipPlanViewModel.ErrorMessage));

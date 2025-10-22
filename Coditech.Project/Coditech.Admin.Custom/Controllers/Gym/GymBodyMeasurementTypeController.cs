@@ -2,9 +2,7 @@
 using Coditech.Admin.Utilities;
 using Coditech.Admin.ViewModel;
 using Coditech.Resources;
-
 using Microsoft.AspNetCore.Mvc;
-
 namespace Coditech.Admin.Controllers
 {
     public class GymBodyMeasurementTypeController : BaseController
@@ -42,7 +40,14 @@ namespace Coditech.Admin.Controllers
                 if (!gymBodyMeasurementTypeViewModel.HasError)
                 {
                     SetNotificationMessage(GetSuccessNotificationMessage(GeneralResources.RecordAddedSuccessMessage));
-                    return RedirectToAction<GymBodyMeasurementTypeController>(x => x.List(null));
+                    if (string.Equals(gymBodyMeasurementTypeViewModel.ActionMode, AdminConstants.ActionModeSave, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return RedirectToAction(AdminConstants.ActionModeSave, new { gymBodyMeasurementTypeId = gymBodyMeasurementTypeViewModel.GymBodyMeasurementTypeId });
+                    }
+                    else if (string.Equals(gymBodyMeasurementTypeViewModel.ActionMode, AdminConstants.ActionModeSaveAndClose, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return RedirectToAction(AdminConstants.ActionRedirectToList);
+                    }
                 }
             }
             SetNotificationMessage(GetErrorNotificationMessage(gymBodyMeasurementTypeViewModel.ErrorMessage));
@@ -64,7 +69,14 @@ namespace Coditech.Admin.Controllers
                 SetNotificationMessage(_gymBodyMeasurementTypeAgent.UpdateGymBodyMeasurementType(gymBodyMeasurementTypeViewModel).HasError
                 ? GetErrorNotificationMessage(GeneralResources.UpdateErrorMessage)
                 : GetSuccessNotificationMessage(GeneralResources.UpdateMessage));
-                return RedirectToAction("Edit", new { gymBodyMeasurementTypeId = gymBodyMeasurementTypeViewModel.GymBodyMeasurementTypeId });
+                if (string.Equals(gymBodyMeasurementTypeViewModel.ActionMode, AdminConstants.ActionModeSave, StringComparison.OrdinalIgnoreCase))
+                {
+                    return RedirectToAction(AdminConstants.ActionRedirectToEdit, new { gymBodyMeasurementTypeId = gymBodyMeasurementTypeViewModel.GymBodyMeasurementTypeId });
+                }
+                else if (string.Equals(gymBodyMeasurementTypeViewModel.ActionMode, AdminConstants.ActionModeSaveAndClose, StringComparison.OrdinalIgnoreCase))
+                {
+                    return RedirectToAction(AdminConstants.ActionRedirectToList);
+                }
             }
             return View(createEdit, gymBodyMeasurementTypeViewModel);
         }

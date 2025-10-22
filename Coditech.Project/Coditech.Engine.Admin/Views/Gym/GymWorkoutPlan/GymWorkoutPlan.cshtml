@@ -8,10 +8,20 @@
     Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
     keyValuePairs.Add("GymWorkoutPlanId", Model.GymWorkoutPlanId.ToString());
     DropdownViewModel centreDropdown = new DropdownViewModel() { DropdownType = DropdownTypeEnum.AccessibleCentre.ToString(), DropdownName = "CentreCode", DropdownSelectedValue = Model.CentreCode, ChangeEvent = "", IsDisabled = Model.GymWorkoutPlanId > 0, IsRequired = true };
+    PageHeaderViewModel headerModel = new PageHeaderViewModel
+    {
+        Title = ViewBag.Title,
+        SaveButtonText = GeneralResources.SaveButtonText,
+        CancelUrl = Url.Action(AdminConstants.ActionRedirectToList, controllerName, new { SelectedCentreCode = @Model.CentreCode }),
+        CancelButtonText = GeneralResources.CancelButtonText,
+        ControllerName = controllerName,
+        ActionName = actionName,
+        FormId = AdminConstants.FormId + controllerName,
+    };
 }
 <!-- Page Content-->
-<div class="page-content mt-5">
-    <div class="container-fluid">
+<div class="page-content">
+    <div class="container-fluid mt-5">
         <div class="row">
             @if (Model.GymWorkoutPlanId > 0)
             {
@@ -21,23 +31,10 @@
             }
             <div class="@css">
                 <div class="card">
-                    <div class="card-header">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                @if (Model.GymWorkoutPlanId > 0)
-                                {
-                                    <h4 class="card-title"><span>Update Workout Plan</span></h4>
-                                }
-                                else
-                                {
-                                    <h4 class="card-title">Create Workout Plan</h4>
-                                }
-                            </div>
-                        </div>
-                    </div>
                     <div class="card-body">
-                        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post))
+                        @using (Html.BeginForm(actionName, controllerName, FormMethod.Post, new { id = headerModel.FormId }))
                         {
+                            @Html.Partial("~/Views/Shared/_SaveAndCloseButtonLayout.cshtml", headerModel)
                             @Html.HiddenFor(m => m.GymWorkoutPlanId)
 
                             if (Model.GymWorkoutPlanId > 0)
@@ -108,8 +105,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-success">@AdminResources.LabelSave</button>
+                            @* <button type="submit" class="btn btn-success">@AdminResources.LabelSave</button>
                             <a href="@Url.Action("Cancel", controllerName, new { SelectedCentreCode = @Model.CentreCode })" class="btn btn-secondary"><i class="ft-x"></i>@AdminResources.LabelCancel</a>
+                         *@
                         }
                     </div>
                 </div>
