@@ -21,7 +21,7 @@
                     <div class="card-header">
                         <input type="hidden" id="SelectedCentreCode" value="@Model.CentreCode" />
                         <span class="card-title">Gym Sales Invoice</span>
-                        <a class="btn btn-secondary" href="/@controllerName/SaleInvoiceList?SelectedCentreCode=@Model.CentreCode&SelectedParameter1=@Model.FromDate&SelectedParameter2=@Model.ToDate">Back</a>
+                        <a class="btn btn-secondary" href="@Url.Action("SaleInvoiceList", controllerName,new  {SelectedCentreCode=@Model.CentreCode,SelectedParameter1=@Model.FromDate,SelectedParameter2=@Model.ToDate})">Back</a>
                     </div>
                     <div id="PrintSalesInvoiceDivId">
                         <div class="card-body invoice-head">
