@@ -31,39 +31,39 @@
 
                                 <div class="col-md-1">
                                     @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", new DropdownViewModel()
-                           {
-                               DropdownType = DropdownTypeEnum.ReportType.ToString(),
-                               DropdownName = "ReportType",
-                               DropdownSelectedValue = Model.ReportType ?? string.Empty,
-                           })
-                                    @Html.ValidationMessageFor(x => x.ReportType)
-                                </div>
-                                <div class="col-md-1">
-                                    @Html.LabelFor(x => x.FromDate, new { @class = "form-label" })
-                                </div>
-                                <div class="col-md-1">
-                                    @Html.TextBoxFor(x => x.FromDate, AdminGeneralHelper.DateFormatForTextBox(), new { @class = "form-control", @readonly = "readonly" })
-                                </div>
-                                <div class="col-md-1">
-                                    @Html.LabelFor(x => x.ToDate, new { @class = "form-label" })
-                                </div>
-                                <div class="col-md-1">
-                                    @Html.TextBoxFor(x => x.ToDate, AdminGeneralHelper.DateFormatForTextBox(), new { @class = "form-control", @readonly = "readonly" })
-                                </div>
-                                <div class="col-md-1">
-                                    <button type="submit" class="btn btn-success">Download</button>
-                                </div>
+                                    {
+                                        DropdownType = DropdownTypeEnum.ReportType.ToString(),
+                                                                DropdownName = "ReportType",
+                                                                DropdownSelectedValue = Model.ReportType ?? string.Empty,
+                                                                })
+                                @Html.ValidationMessageFor(x => x.ReportType)
                             </div>
-                        }
+                            <div class="col-md-1">
+                                @Html.LabelFor(x => x.FromDate, new { @class = "form-label" })
+                            </div>
+                            <div class="col-md-1">
+                                @Html.TextBoxFor(x => x.FromDate, AdminGeneralHelper.DateFormatForTextBox(), new { @class = "form-control", @readonly = "readonly" })
+                            </div>
+                            <div class="col-md-1">
+                                @Html.LabelFor(x => x.ToDate, new { @class = "form-label" })
+                            </div>
+                            <div class="col-md-1">
+                                @Html.TextBoxFor(x => x.ToDate, AdminGeneralHelper.DateFormatForTextBox(), new { @class = "form-control", @readonly = "readonly" })
+                            </div>
+                           
+                            <div class="col-md-1 text-end">
+                                <button type="submit" id="btnDownload" class="btn btn-success w-100">Download</button>
+                            </div>
+                        </div>
+                                                }
 
                         @if (!Model.IsRecordFound)
                         {
-                            <div class="row">
-                                <div class="col-sm-12 col-md-5">
-                                    <span>No Result Found</span>
-                                </div>
+                            <div class="d-flex justify-content-center align-items-center" style="min-height: 50px;">
+                                <strong class="text-danger fs-5">No Result Found</strong>
                             </div>
                         }
+
                     </div>
                 </div>
             </div>
@@ -109,6 +109,19 @@
                     }
                 },
                 maxDate: new Date(),
+            });
+        });
+             // 🔥 Prevent Download Button from Freezing
+        $(document).ready(function () {
+            var form = $('form');
+            form.on('submit', function () {
+                var btn = $('#btnDownload');
+                btn.prop('disabled', true).text('Download');
+
+                // Re-enable button after 3 seconds (adjust as needed)
+                setTimeout(function () {
+                    btn.prop('disabled', false).text('Download');
+                }, 3000);
             });
         });
     </script>

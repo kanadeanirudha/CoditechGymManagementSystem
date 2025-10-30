@@ -56,7 +56,7 @@ namespace Coditech.API.Service
             // Bind the Filter, sorts & Paging shipPlan.
             PageListModel pageListModel = new PageListModel(filters, sorts, pagingStart, pagingLength);
             CoditechViewRepository<GymMemberSalesInvoiceModel> objStoredProc = new CoditechViewRepository<GymMemberSalesInvoiceModel>(_serviceProvider.GetService<CoditechCustom_Entities>());
-            objStoredProc.SetParameter("@AdminRoleMasterId", adminRoleMasterId, ParameterDirection.Input, DbType.Int32);
+            //objStoredProc.SetParameter("@AdminRoleMasterId", adminRoleMasterId, ParameterDirection.Input, DbType.Int32);
             objStoredProc.SetParameter("@CentreCode", SelectedCentreCode, ParameterDirection.Input, DbType.String);
             objStoredProc.SetParameter("@FromDate", fromDate, ParameterDirection.Input, DbType.Date);
             objStoredProc.SetParameter("@ToDate", toDate, ParameterDirection.Input, DbType.Date);
@@ -65,7 +65,7 @@ namespace Coditech.API.Service
             objStoredProc.SetParameter("@Rows", pageListModel.PagingLength, ParameterDirection.Input, DbType.Int32);
             objStoredProc.SetParameter("@Order_BY", pageListModel.OrderBy, ParameterDirection.Input, DbType.String);
             objStoredProc.SetParameter("@RowsCount", pageListModel.TotalRowCount, ParameterDirection.Output, DbType.Int32);
-            List<GymMemberSalesInvoiceModel> gymMemberSalesInvoiceList = objStoredProc.ExecuteStoredProcedureList("Coditech_GetGymMemberServiceInvoiceList @AdminRoleMasterId,@CentreCode,@FromDate,@ToDate,@WhereClause,@Rows,@PageNo,@Order_BY,@RowsCount OUT", 8, out pageListModel.TotalRowCount)?.ToList();
+            List<GymMemberSalesInvoiceModel> gymMemberSalesInvoiceList = objStoredProc.ExecuteStoredProcedureList("Coditech_GetGymMemberServiceInvoiceList @CentreCode,@FromDate,@ToDate,@WhereClause,@Rows,@PageNo,@Order_BY,@RowsCount OUT", 7, out pageListModel.TotalRowCount)?.ToList();
 
             GymMemberSalesInvoiceListModel listModel = new GymMemberSalesInvoiceListModel();
             listModel.GymMemberSalesInvoiceList = gymMemberSalesInvoiceList?.Count > 0 ? gymMemberSalesInvoiceList : new List<GymMemberSalesInvoiceModel>();
