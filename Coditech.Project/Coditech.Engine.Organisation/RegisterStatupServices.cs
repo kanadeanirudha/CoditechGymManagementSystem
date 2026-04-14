@@ -4,6 +4,7 @@ using Coditech.API.Service.DependencyRegistration;
 using Coditech.Common.API;
 using Coditech.Common.Helper;
 using Coditech.Common.Helper.Utilities;
+using Coditech.Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 
@@ -44,6 +45,9 @@ namespace Coditech.API.Common
             builder.RegisterDI();
             builder.RegisterCustomDI();
 
+            // Register the hangfire services.
+            builder.RegisterHangfire();
+
             // Configured conventional route settings.
             builder.ConfigureRouteSettings();
 
@@ -76,6 +80,9 @@ namespace Coditech.API.Common
 
             // Adds a <see cref="EndpointRoutingMiddleware"/> middleware to the specified <see cref="IApplicationBuilder"/>.
             app.UseRouting();
+
+            // Configure HangfireDashboard with custom code.
+            app.ConfigureHangfireDashboard();
 
             // Adds middleware for redirecting HTTP Requests to HTTPS.
             app.UseHttpsRedirection();
@@ -212,6 +219,13 @@ namespace Coditech.API.Common
             // Assigned Translator to TranslatorExtension.
             TranslatorExtension.TranslatorInstance = CoditechDependencyResolver._staticServiceProvider?.GetService<CoditechTranslator>();
         }
+
+        public static void RegisterHangfire(this WebApplicationBuilder builder)
+        {
+            // Configure the hangfire service
+            builder.Services.ConfigureServices(builder.Configuration);
+        }
+
         #endregion
 
         public static void RegisterCustomDI(this WebApplicationBuilder builder)
