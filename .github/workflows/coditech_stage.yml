@@ -1,4 +1,4 @@
-name: Deploy-Production-FitNext
+name: Deploy-Production-PAHPC
 
 on: 
 
@@ -38,7 +38,7 @@ on:
 
 jobs:
   coditech_build:
-    runs-on: [self-hosted, Windows, x64, coditech_fitnext]
+    runs-on: [self-hosted, Windows, x64, coditech_pahpc]
     if: github.event.inputs.coditech_build == 'true'
 
     steps:
@@ -56,7 +56,7 @@ jobs:
            & "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\MSBuild\\Current\\Bin\\msbuild.exe"  './Coditech.Project/Coditech.Project.sln' /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:publishUrl="./publish/Release" /p:Configuration=Release /p:TransformConfigFiles=false
 
   admin_deploy:
-    runs-on: [self-hosted, Windows, x64, coditech_fitnext]
+    runs-on: [self-hosted, Windows, x64, coditech_pahpc]
     needs: coditech_build
     if: github.event.inputs.admin_deploy == 'true'
     
@@ -64,33 +64,33 @@ jobs:
       - name: Stop ADMIN IIS Site and App Pool
         run: |
           # Stop the IIS site
-          Stop-WebSite -Name "fitnext-admin" 
+          Stop-WebSite -Name "pahpc-admin" 
 
           # Stop the associated app pool
-          Stop-WebAppPool -Name "fitnext-admin"
+          Stop-WebAppPool -Name "pahpc-admin"
 
           # Wait for a few seconds (optional, if needed)
           Start-Sleep -Seconds 5
 
       - name: Copy Build file
-        run: Copy-Item -Path C:\GitAction\FitNext\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Coditech.Engine.Admin\bin\Release\net8.0\*  -Destination C:\HostingSites\FitNext\Admin\ -Recurse -Force
+        run: Copy-Item -Path C:\GitAction\PAHPC\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Coditech.Engine.Admin\bin\Release\net8.0\*  -Destination C:\HostingSites\PAHPC\Admin\ -Recurse -Force
       - name: Copy Build webroot
-        run: Copy-Item -Path C:\GitAction\FitNext\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Coditech.Engine.Admin\wwwroot\*  -Destination C:\HostingSites\FitNext\Admin\wwwroot\ -Recurse -Force
+        run: Copy-Item -Path C:\GitAction\PAHPC\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Coditech.Engine.Admin\wwwroot\*  -Destination C:\HostingSites\PAHPC\Admin\wwwroot\ -Recurse -Force
       - name: Copy Build views
-        run: Copy-Item -Path C:\GitAction\FitNext\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Coditech.Engine.Admin\Views\*  -Destination C:\HostingSites\FitNext\Admin\Views\ -Recurse -Force
+        run: Copy-Item -Path C:\GitAction\PAHPC\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Coditech.Engine.Admin\Views\*  -Destination C:\HostingSites\PAHPC\Admin\Views\ -Recurse -Force
       - name: Copy Build report folder
-        run: Copy-Item -Path C:\GitAction\FitNext\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Coditech.Engine.Admin\Reports\*  -Destination C:\HostingSites\FitNext\Admin\Reports\ -Recurse -Force
+        run: Copy-Item -Path C:\GitAction\PAHPC\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Coditech.Engine.Admin\Reports\*  -Destination C:\HostingSites\PAHPC\Admin\Reports\ -Recurse -Force
 
       - name: Start ADMIN IIS Site and App Pool
         run: |
           # Start the IIS site
-          Start-WebSite -Name "fitnext-admin"
+          Start-WebSite -Name "pahpc-admin"
 
           # Start the associated app pool
-          Start-WebAppPool -Name "fitnext-admin"
+          Start-WebAppPool -Name "pahpc-admin"
 
   gymmanagementsystem_api_deploy:
-    runs-on: [self-hosted, Windows, x64, coditech_fitnext]
+    runs-on: [self-hosted, Windows, x64, coditech_pahpc]
     needs: coditech_build
     if: github.event.inputs.gymmanagementsystem_api_deploy == 'true'
 
@@ -98,27 +98,27 @@ jobs:
       - name: Stop GymManagementSystem IIS Site and App Pool
         run: |
           # Stop the IIS site
-          Stop-WebSite -Name "fitnext-api-gymmanagementsystem" 
+          Stop-WebSite -Name "pahpc-api-gymmanagementsystem" 
 
           # Stop the associated app pool
-          Stop-WebAppPool -Name "fitnext-api-gymmanagementsystem"
+          Stop-WebAppPool -Name "pahpc-api-gymmanagementsystem"
 
           # Wait for a few seconds (optional, if needed)
           Start-Sleep -Seconds 5
 
       - name: Copy Build file
-        run: Copy-Item -Path C:\GitAction\FitNext\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Coditech.Engine.GymManagementSystem\bin\Release\net8.0\*  -Destination C:\HostingSites\FitNext\GMS\ -Recurse -Force 
+        run: Copy-Item -Path C:\GitAction\PAHPC\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Coditech.Engine.GymManagementSystem\bin\Release\net8.0\*  -Destination C:\HostingSites\PAHPC\GMS\ -Recurse -Force 
 
       - name: Start GymManagementSystem IIS Site and App Pool
         run: |
           # Start the IIS site
-          Start-WebSite -Name "fitnext-api-gymmanagementsystem"
+          Start-WebSite -Name "pahpc-api-gymmanagementsystem"
 
           # Start the associated app pool
-          Start-WebAppPool -Name "fitnext-api-gymmanagementsystem"
+          Start-WebAppPool -Name "pahpc-api-gymmanagementsystem"
 
   mediamanager_api_deploy:
-    runs-on: [self-hosted, Windows, x64, coditech_fitnext]
+    runs-on: [self-hosted, Windows, x64, coditech_pahpc]
     needs: coditech_build
     if: github.event.inputs.mediamanager_api_deploy == 'true'
 
@@ -127,25 +127,25 @@ jobs:
       - name: Stop MediaManager IIS Site and App Pool
         run: |
            # Stop the IIS site
-           Stop-WebSite -Name "fitnext-api-mediamanager" 
+           Stop-WebSite -Name "pahpc-api-mediamanager" 
            # Stop the associated app pool
-           Stop-WebAppPool -Name "fitnext-api-mediamanager"
+           Stop-WebAppPool -Name "pahpc-api-mediamanager"
 
            # Wait for a few seconds (optional, if needed)
            Start-Sleep -Seconds 5
 
       - name: Copy Build file
-        run: Copy-Item -Path C:\GitAction\FitNext\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Coditech.Engine.MediaManager\bin\Release\net8.0\* -Destination C:\HostingSites\FitNext\MediaManager\ -Recurse -Force 
+        run: Copy-Item -Path C:\GitAction\PAHPC\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Coditech.Engine.MediaManager\bin\Release\net8.0\* -Destination C:\HostingSites\PAHPC\MediaManager\ -Recurse -Force 
 
       - name: Start MediaManager IIS Site and App Pool
         run: |
            # Start the IIS site
-           Start-WebSite -Name "fitnext-api-mediamanager"
+           Start-WebSite -Name "pahpc-api-mediamanager"
            # Start the associated app pool
-           Start-WebAppPool -Name "fitnext-api-mediamanager"
+           Start-WebAppPool -Name "pahpc-api-mediamanager"
 
   organisation_api_deploy:
-    runs-on: [self-hosted, Windows, x64, coditech_fitnext]
+    runs-on: [self-hosted, Windows, x64, coditech_pahpc]
     needs: coditech_build
     if: github.event.inputs.organisation_api_deploy == 'true'
 
@@ -153,25 +153,25 @@ jobs:
       - name: Stop Organisation IIS Site and App Pool
         run: |
            # Stop the IIS site
-           Stop-WebSite -Name "fitnext-api-organisation" 
+           Stop-WebSite -Name "pahpc-api-organisation" 
            # Stop the associated app pool
-           Stop-WebAppPool -Name "fitnext-api-organisation"
+           Stop-WebAppPool -Name "pahpc-api-organisation"
 
            # Wait for a few seconds (optional, if needed)
            Start-Sleep -Seconds 5
 
       - name: Copy Build file
-        run: Copy-Item -Path C:\GitAction\FitNext\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Coditech.Engine.Organisation\bin\Release\net8.0\* -Destination C:\HostingSites\FitNext\Organisation\ -Recurse -Force 
+        run: Copy-Item -Path C:\GitAction\PAHPC\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Coditech.Engine.Organisation\bin\Release\net8.0\* -Destination C:\HostingSites\PAHPC\Organisation\ -Recurse -Force 
 
       - name: Start Organisation IIS Site and App Pool
         run: |
            # Start the IIS site
-           Start-WebSite -Name "fitnext-api-organisation"
+           Start-WebSite -Name "pahpc-api-organisation"
            # Start the associated app pool
-           Start-WebAppPool -Name "fitnext-api-organisation"
+           Start-WebAppPool -Name "pahpc-api-organisation"
            
   # payment_api_deploy:
-  #   runs-on: [self-hosted, Windows, x64, coditech_fitnext]
+  #   runs-on: [self-hosted, Windows, x64, coditech_pahpc]
   #   needs: coditech_build
   #   if: github.event.inputs.payment_api_deploy == 'true'
 
@@ -179,19 +179,19 @@ jobs:
   #     - name: Stop payment IIS Site and App Pool
   #       run: |
   #          # Stop the IIS site
-  #          Stop-WebSite -Name "fitnext-api-payment" 
+  #          Stop-WebSite -Name "pahpc-api-payment" 
   #          # Stop the associated app pool
-  #          Stop-WebAppPool -Name "fitnext-api-payment"
+  #          Stop-WebAppPool -Name "pahpc-api-payment"
 
   #          # Wait for a few seconds (optional, if needed)
   #          Start-Sleep -Seconds 5
 
   #     - name: Copy Build file
-  #       run: Copy-Item -Path C:\GitAction\FitNext\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Coditech.Engine.Payment\bin\Release\net8.0\* -Destination C:\HostingSites\FitNext\payment\ -Recurse -Force 
+  #       run: Copy-Item -Path C:\GitAction\PAHPC\_work\CoditechGymManagementSystem\CoditechGymManagementSystem\Coditech.Project\Coditech.Engine.Payment\bin\Release\net8.0\* -Destination C:\HostingSites\PAHPC\payment\ -Recurse -Force 
 
   #     - name: Start payment IIS Site and App Pool
   #       run: |
   #          # Start the IIS site
-  #          Start-WebSite -Name "fitnext-api-payment"
+  #          Start-WebSite -Name "pahpc-api-payment"
   #          # Start the associated app pool
-  #          Start-WebAppPool -Name "fitnext-api-payment"
+  #          Start-WebAppPool -Name "pahpc-api-payment"
