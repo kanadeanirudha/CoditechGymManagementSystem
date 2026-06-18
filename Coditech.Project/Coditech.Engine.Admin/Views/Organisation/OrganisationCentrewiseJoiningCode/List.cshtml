@@ -25,6 +25,15 @@
                 ChangeEvent = "OrganisationCentrewiseJoiningCode.JoiningCodeListByCentreCodeList()"
             };
 
+    DropdownViewModel joiningCodeStatus = new DropdownViewModel()
+            {
+                DropdownType = DropdownTypeEnum.JoiningCodeStatus.ToString(),
+                DropdownName = "SelectedParameter2",
+                DropdownSelectedValue = string.IsNullOrEmpty(Model.SelectedParameter2) ? "1" : Model.SelectedParameter2,
+                SelectedText = "Available",
+                SelectedValue = "1",
+                ChangeEvent = "OrganisationCentrewiseJoiningCode.JoiningCodeListByCentreCodeList()"
+            };
 }
 <div class="page-content mt-5">
     <div class="container-fluid">
@@ -43,7 +52,7 @@
                             <div class="col-md-1">
                                 <label>@AdminResources.LabelCentre</label>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", centreDropdown)
                             </div>
                             <div class="col-md-1">
@@ -53,10 +62,16 @@
                                 @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", joiningCodeType)
                             </div>
                             <div class="col-md-1">
+                                <label>Joining Code Status</label>
+                            </div>
+                            <div class="col-md-2">
+                                @Html.Partial("~/Views/Shared/Control/_DropdownList.cshtml", joiningCodeStatus)
+                            </div>
+                            <div class="col-md-2">
                                 <input type="button" class="btn btn-success" value="Show" id="ShowDataId"
                                        onclick="OrganisationCentrewiseJoiningCode.JoiningCodeListByCentreCodeList()" />
-                            </div>
-                            <div class="col-md-5">
+                            </div>                        
+                            <div class="col-md-6">
                                 <label class="fw-bold">
 
                                     Total Joining Code:  <span class="badge badge-soft-primary me-2 "><span id="TotalCodeCount"></span> </span>
